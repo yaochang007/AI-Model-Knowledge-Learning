@@ -949,6 +949,85 @@ body.dark .llm-badge {
     grid-column: 1 / -1;
 }
 
+.reading-study-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reading-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.reading-tags {
+    margin-top: 16px;
+}
+
+.reading-note-card {
+    min-height: 300px;
+}
+
+.reading-roadmap,
+.reading-term-list,
+.reading-comment-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.reading-step {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 14px;
+    padding: 14px 0;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+}
+
+.reading-step:first-child,
+.reading-term-card:first-child,
+.reading-comment:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.reading-step-number {
+    color: var(--success);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.reading-step strong,
+.reading-term-card strong,
+.reading-comment span {
+    display: block;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.reading-step p,
+.reading-term-card p,
+.reading-comment p {
+    color: var(--text-secondary);
+}
+
+.reading-term-card,
+.reading-comment {
+    padding: 12px 0;
+    border-top: 1px solid var(--border);
+}
+
+.reading-comment span {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
 .analysis-slide {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1073,6 +1152,20 @@ body.dark .llm-badge {
 
     .reading-layout {
         grid-template-columns: 1fr;
+    }
+
+    .reading-study-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reading-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .reading-actions .paper-link {
+        justify-content: center;
+        white-space: normal;
     }
 
     .analysis-slide {

@@ -1,4 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
+const ASSET_VERSION = '20260520-3';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -8,125 +9,158 @@ const escapeHtml = (text) => {
 
 const getPaperSlug = () => new URLSearchParams(window.location.search).get('paper');
 
-const glossary = {
-    "Transformer": "A neural architecture that mixes token information with attention instead of recurrence.",
-    "Self-Attention": "A mechanism where each token chooses which other tokens to use as context.",
-    "LLM Foundations": "Core ideas that explain how modern large language models are built or trained.",
-    "Efficient Attention": "Methods that reduce the memory or compute cost of attention.",
-    "Long Context": "Model behavior when processing many tokens at once.",
-    "Pretraining": "Training on broad data before adapting to specific tasks.",
-    "Scaling": "How model quality changes as data, parameters, or compute increase.",
-    "Alignment": "Methods for making model behavior better match human intent and safety needs.",
-    "RLHF": "Reinforcement learning from human feedback; a way to tune models using human preferences.",
-    "Reasoning": "The model's ability to solve multi-step tasks instead of only pattern matching.",
-    "Prompting": "Writing inputs that steer a model toward a desired behavior.",
-    "RAG": "Retrieval-augmented generation; retrieve source text first, then generate from it.",
-    "Fine-Tuning": "Training a pretrained model further on task or preference data.",
-    "Agents": "Systems where a model plans, uses tools, and acts over multiple steps.",
-    "Tool Use": "Letting a model call external functions, APIs, search, calculators, or databases.",
-    "Study Planning": "Turning learning goals into ordered tasks, schedules, and feedback loops.",
-    "Tutoring": "Guided help that diagnoses understanding and supports learner progress."
-};
-
-function meaningForTag(tag) {
-    return glossary[tag] || `A theme to connect with the paper's problem, method, and practical impact.`;
+function fetchJson(path) {
+    return fetch(`${path}?v=${ASSET_VERSION}`).then(response => {
+        if(!response.ok) throw new Error(`Failed to load ${path}`);
+        return response.json();
+    });
 }
 
-function sectionByHeading(paper, heading) {
-    return paper.sections.find(section => section.heading === heading);
+function renderList(items) {
+    return items.map(item => `<li>${escapeHtml(item)}</li>`).join('');
 }
 
-function renderReading(paper, essential) {
-    document.title = `${paper.title} Intensive Reading | Vue Tech SG AI Research`;
+function renderRoadmap(items) {
+    return items.map((item, index) => `
+        <li class="reading-step">
+            <span class="reading-step-number">${String(index + 1).padStart(2, '0')}</span>
+            <div>
+                <strong>${escapeHtml(item.step)}</strong>
+                <p>${escapeHtml(item.comment)}</p>
+            </div>
+        </li>
+    `).join('');
+}
+
+function renderTermCards(items) {
+    return items.map(item => `
+        <li class="reading-term-card">
+            <strong>${escapeHtml(item.term)}</strong>
+            <p>${escapeHtml(item.note)}</p>
+        </li>
+    `).join('');
+}
+
+function renderMarginNotes(items) {
+    return items.map(item => `
+        <li class="reading-comment">
+            <span>${escapeHtml(item.label)}</span>
+            <p>${escapeHtml(item.note)}</p>
+        </li>
+    `).join('');
+}
+
+function renderTags(tags) {
+    return tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('');
+}
+
+function renderAnnotatedMap(sections) {
+    return sections.map(section => `
+        <li class="reading-comment">
+            <span>${escapeHtml(section.heading)}</span>
+            <p>${escapeHtml(section.points.join(' '))}</p>
+        </li>
+    `).join('');
+}
+
+function renderReading(analysis, essential, notes) {
+    document.title = `${analysis.title} Intensive Reading | Vue Tech SG AI Research`;
     const tags = essential?.tags || [];
-    const overview = sectionByHeading(paper, 'Overview')?.points || [];
-    const method = sectionByHeading(paper, 'Method')?.points || [];
-    const limitations = sectionByHeading(paper, 'Limitations')?.points || [];
-    const takeaways = sectionByHeading(paper, 'Practical Takeaways')?.points || [];
+    const pdfPath = essential?.pdfPath;
+    const sourceUrl = essential?.sourceUrl || analysis.sourceUrl;
 
     readingDeck.innerHTML = `
         <article class="analysis-hero">
-            <div class="analysis-eyebrow">Intensive Reading - ${escapeHtml(paper.venue)} ${escapeHtml(paper.year)}</div>
-            <h1>${escapeHtml(paper.title)}</h1>
-            <p>${escapeHtml(paper.subtitle)}</p>
+            <div class="analysis-eyebrow">Intensive Reading - ${escapeHtml(analysis.venue)} ${escapeHtml(analysis.year)}</div>
+            <h1>${escapeHtml(analysis.title)}</h1>
+            <p>${escapeHtml(analysis.subtitle)}</p>
+            <div class="reading-actions">
+                <a class="paper-link" href="analysis.html?paper=${encodeURIComponent(analysis.slug)}"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
+                ${pdfPath ? `<a class="paper-link" href="${escapeHtml(pdfPath)}" download><i class="fa-solid fa-file-arrow-down"></i> Download PDF</a>` : ''}
+                ${sourceUrl ? `<a class="paper-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Source</a>` : ''}
+            </div>
+            ${tags.length ? `<div class="paper-tags reading-tags">${renderTags(tags)}</div>` : ''}
         </article>
-        <div class="reading-layout">
-            <section class="analysis-slide reading-wide">
+        <div class="reading-study-grid">
+            <section class="analysis-slide reading-note-card">
                 <div class="slide-number">01</div>
-                <h2>Before You Read</h2>
+                <h2>Study Setup</h2>
                 <ul>
-                    <li>Goal: explain the paper's problem, core method, evidence, and limitation in your own words.</li>
-                    <li>Skim the abstract, introduction, method diagram, results table, and conclusion before reading line by line.</li>
-                    <li>Write one question you want the paper to answer before opening the PDF.</li>
+                    ${renderList(notes.before)}
                 </ul>
             </section>
-            <section class="analysis-slide">
+            <section class="analysis-slide reading-note-card">
                 <div class="slide-number">02</div>
-                <h2>Plain-English Anchor</h2>
-                <ul>
-                    ${overview.map(point => `<li>${escapeHtml(point)}</li>`).join('')}
-                    <li>In one sentence: this paper matters because it changes how researchers build, train, use, or evaluate AI systems.</li>
+                <h2>Core Concepts</h2>
+                <ul class="reading-term-list">
+                    ${renderTermCards(notes.concepts)}
                 </ul>
             </section>
-            <section class="analysis-slide">
+            <section class="analysis-slide reading-note-card reading-wide">
                 <div class="slide-number">03</div>
-                <h2>Key Terms</h2>
+                <h2>Reading Roadmap</h2>
+                <ol class="reading-roadmap">
+                    ${renderRoadmap(notes.roadmap)}
+                </ol>
+            </section>
+            <section class="analysis-slide reading-note-card reading-wide">
+                <div class="slide-number">04</div>
+                <h2>Detailed Comments</h2>
+                <ul class="reading-comment-list">
+                    ${renderMarginNotes(notes.marginNotes)}
+                </ul>
+            </section>
+            <section class="analysis-slide reading-note-card reading-wide">
+                <div class="slide-number">05</div>
+                <h2>Annotated Paper Map</h2>
+                <ul class="reading-comment-list">
+                    ${renderAnnotatedMap(analysis.sections)}
+                </ul>
+            </section>
+            <section class="analysis-slide reading-note-card">
+                <div class="slide-number">06</div>
+                <h2>Common Pitfalls</h2>
                 <ul>
-                    ${tags.slice(0, 5).map(tag => `<li><strong>${escapeHtml(tag)}:</strong> ${escapeHtml(meaningForTag(tag))}</li>`).join('')}
+                    ${renderList(notes.pitfalls)}
+                </ul>
+            </section>
+            <section class="analysis-slide reading-note-card">
+                <div class="slide-number">07</div>
+                <h2>Practice Tasks</h2>
+                <ul>
+                    ${renderList(notes.practice)}
                 </ul>
             </section>
             <section class="analysis-slide reading-wide">
-                <div class="slide-number">04</div>
-                <h2>Guided Walkthrough</h2>
+                <div class="slide-number">08</div>
+                <h2>Undergraduate Reading Routine</h2>
                 <ul>
-                    <li><strong>Problem:</strong> Identify what was hard, expensive, unreliable, or missing before this paper.</li>
-                    <li><strong>Method:</strong> ${escapeHtml(method[0] || 'Find the main algorithm or system design and redraw it as a simple box diagram.')}</li>
-                    <li><strong>Evidence:</strong> Locate the main benchmark, comparison, ablation, or human evaluation supporting the claim.</li>
-                    <li><strong>Boundary:</strong> ${escapeHtml(limitations[0] || 'Name one setting where the method may fail or need more evidence.')}</li>
-                </ul>
-            </section>
-            <section class="analysis-slide">
-                <div class="slide-number">05</div>
-                <h2>Check Understanding</h2>
-                <ul>
-                    <li>What is the paper's one-line contribution?</li>
-                    <li>Which assumption would break the method if it were false?</li>
-                    <li>What experiment would convince you the idea works in your own domain?</li>
-                </ul>
-            </section>
-            <section class="analysis-slide">
-                <div class="slide-number">06</div>
-                <h2>Study Exercise</h2>
-                <ul>
-                    <li>Draw the model or workflow in 5 boxes or fewer.</li>
-                    <li>Teach the idea to a friend without using equations first, then add the key equation or objective.</li>
-                    <li>${escapeHtml(takeaways[0] || 'Write one practical lesson you would apply in a project.')}</li>
+                    <li>First pass: read the abstract, figures, and conclusion, then write a three-sentence summary without looking back.</li>
+                    <li>Second pass: annotate each method step with what data enters, what computation happens, and what output leaves.</li>
+                    <li>Third pass: check the evidence. Identify the strongest result, the weakest result, and one missing experiment.</li>
+                    <li>Final pass: connect the paper to a small project, classroom activity, or research question you could test.</li>
                 </ul>
             </section>
         </div>
         <div class="analysis-bottom-nav">
-            <a class="paper-link" href="analysis.html?paper=${encodeURIComponent(paper.slug)}"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
+            <a class="paper-link" href="analysis.html?paper=${encodeURIComponent(analysis.slug)}"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
             <a class="paper-link" href="./#essential-papers"><i class="fa-solid fa-arrow-left"></i> Back to Essential Papers</a>
         </div>
     `;
 }
 
 Promise.all([
-    fetch('data/paper-analyses.json').then(response => {
-        if(!response.ok) throw new Error('Failed to load paper analyses');
-        return response.json();
-    }),
-    fetch('data/essential-papers.json').then(response => {
-        if(!response.ok) throw new Error('Failed to load essential papers');
-        return response.json();
-    })
+    fetchJson('data/paper-analyses.json'),
+    fetchJson('data/essential-papers.json'),
+    fetchJson('data/paper-study-notes.json')
 ])
-    .then(([analyses, essentials]) => {
+    .then(([analyses, essentials, studyNotes]) => {
         const slug = getPaperSlug();
-        const paper = analyses.find(item => item.slug === slug) || analyses[0];
-        const essential = essentials.find(item => item.slug === paper.slug);
-        if(!paper) throw new Error('No reading data available');
-        renderReading(paper, essential);
+        const analysis = analyses.find(item => item.slug === slug) || analyses[0];
+        const essential = essentials.find(item => item.slug === analysis.slug);
+        const notes = studyNotes.find(item => item.slug === analysis.slug);
+        if(!analysis || !notes) throw new Error('No reading data available');
+        renderReading(analysis, essential, notes);
     })
     .catch(error => {
         readingDeck.innerHTML = `

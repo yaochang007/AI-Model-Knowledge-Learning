@@ -1,0 +1,596 @@
+[
+  {
+    "slug": "attention-is-all-you-need",
+    "before": ["Know the encoder-decoder sequence-to-sequence setup: an input sentence is encoded, then an output sentence is decoded.", "Review dot products, softmax, embeddings, residual connections, and layer normalization."],
+    "roadmap": [
+      {"step": "Start with Figure 1", "comment": "Trace one token through embedding, positional encoding, multi-head attention, feed-forward layers, and residual paths before reading equations."},
+      {"step": "Study scaled dot-product attention", "comment": "Queries ask what this token needs, keys advertise what each token contains, and values carry the information to mix."},
+      {"step": "Read the results after the method", "comment": "The key lesson is not only better BLEU, but faster parallel training because recurrence is removed."}
+    ],
+    "concepts": [
+      {"term": "Self-attention", "note": "Every token builds a weighted summary of other tokens, so word relationships are learned directly instead of passed step by step through a recurrent state."},
+      {"term": "Multi-head attention", "note": "Multiple attention heads let the model learn different relation types, such as syntax, long-distance dependencies, or local phrase structure."},
+      {"term": "Positional encoding", "note": "Because attention alone is permutation-insensitive, position signals are added so token order remains visible."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "RNNs process tokens sequentially, which slows training and makes long-range dependency learning harder."},
+      {"label": "Method", "note": "The Transformer replaces recurrence with attention blocks plus feed-forward layers, repeated in encoder and decoder stacks."},
+      {"label": "Evidence", "note": "The paper reports strong WMT translation results and substantially less training cost than prior recurrent/convolutional systems."},
+      {"label": "Why students struggle", "note": "Do not memorize the block diagram first. Understand Q, K, V attention with a small three-token example, then return to the full architecture."}
+    ],
+    "pitfalls": ["Thinking attention is just interpretability. Here it is the computation that moves information between tokens.", "Forgetting that the original Transformer is encoder-decoder; GPT-style LLMs mainly use decoder-only variants."],
+    "practice": ["Compute a tiny attention example with two query vectors and three key vectors by hand.", "Explain why parallel training is easier for attention than for an RNN."]
+  },
+  {
+    "slug": "kimi-linear",
+    "before": ["Review why full attention has quadratic cost in sequence length and why KV cache size matters during decoding.", "Know the rough idea of linear attention: replace explicit all-pairs attention with a recurrent or kernelized summary."],
+    "roadmap": [
+      {"step": "Identify the bottleneck first", "comment": "The paper is about long-context efficiency, so read every architectural choice as a response to memory, cache, and throughput limits."},
+      {"step": "Separate KDA from the full model", "comment": "Kimi Delta Attention is the central mechanism; the model architecture combines it with other choices for practical performance."},
+      {"step": "Read claims as systems claims", "comment": "Numbers like KV-cache reduction and decoding throughput are as important as benchmark accuracy."}
+    ],
+    "concepts": [
+      {"term": "Linear attention", "note": "A family of attention alternatives that avoids storing every token-token interaction explicitly."},
+      {"term": "Gated memory", "note": "The model can decide what information to keep, overwrite, or forget as sequence information is compressed."},
+      {"term": "Long-context serving", "note": "At very long context, memory bandwidth and KV cache can dominate practical cost."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Full attention is powerful but expensive when context length grows to hundreds of thousands or millions of tokens."},
+      {"label": "Method", "note": "Kimi Linear uses a more expressive linear attention mechanism and a hardware-aware chunkwise computation strategy."},
+      {"label": "Evidence", "note": "The important evidence is the combination of quality comparisons and reported cache/throughput improvements."},
+      {"label": "How to read critically", "note": "Ask whether the gains hold across model sizes, tasks, hardware, and real serving constraints."}
+    ],
+    "pitfalls": ["Assuming linear attention is automatically better. It trades exact pairwise interactions for compressed state.", "Ignoring engineering details. The algorithmic idea and hardware-aware implementation work together."],
+    "practice": ["Compare full attention and linear attention with a table: memory, compute, quality risk, and serving impact.", "Design a benchmark for a long-document tutor that would test whether Kimi-style attention helps."]
+  },
+  {
+    "slug": "bert",
+    "before": ["Understand the difference between encoder-only, decoder-only, and encoder-decoder Transformers.", "Review masked language modeling and why bidirectional context is useful for understanding tasks."],
+    "roadmap": [
+      {"step": "Start with the pretraining tasks", "comment": "BERT is mostly about how to train representations, not a new Transformer block."},
+      {"step": "Map tasks to fine-tuning heads", "comment": "For classification, QA, and sentence-pair tasks, notice how little task-specific architecture is added."},
+      {"step": "Compare with GPT", "comment": "BERT sees both left and right context; GPT predicts left to right. This difference explains many downstream behavior differences."}
+    ],
+    "concepts": [
+      {"term": "Masked language modeling", "note": "Hide tokens and train the model to recover them using both sides of context."},
+      {"term": "Fine-tuning", "note": "Start from a general pretrained model and update it on a labeled task with minimal architectural changes."},
+      {"term": "[CLS] representation", "note": "A special token representation is often used as a pooled summary for classification tasks."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Before BERT, many NLP systems were task-specific or only weakly bidirectional."},
+      {"label": "Method", "note": "Pretrain a deep bidirectional Transformer encoder, then fine-tune the whole model for each task."},
+      {"label": "Evidence", "note": "The paper reports strong results on GLUE, MultiNLI, SQuAD, and other understanding benchmarks."},
+      {"label": "Study comment", "note": "BERT is a representation learner. Do not expect it to behave like a chat model without additional generation architecture."}
+    ],
+    "pitfalls": ["Calling BERT an LLM assistant. It is foundational, but not a decoder chat model.", "Forgetting that masked pretraining creates a train-test mismatch because [MASK] is not used in normal input text."],
+    "practice": ["Take one sentiment classification example and sketch how BERT turns it into a label.", "Explain why bidirectional context helps question answering spans."]
+  },
+  {
+    "slug": "t5",
+    "before": ["Know supervised fine-tuning and basic encoder-decoder Transformers.", "Review common NLP tasks: translation, summarization, classification, question answering."],
+    "roadmap": [
+      {"step": "Read the text-to-text framing first", "comment": "The paper's unifying trick is to make every task look like input text to output text."},
+      {"step": "Skim the experimental grid", "comment": "This is partly an empirical study of what design choices matter for transfer learning."},
+      {"step": "Connect to instruction tuning", "comment": "Task prefixes in T5 are an ancestor of later natural-language instruction formats."}
+    ],
+    "concepts": [
+      {"term": "Text-to-text", "note": "Classification labels, answers, summaries, and translations are all generated as text."},
+      {"term": "Denoising objective", "note": "The model learns by reconstructing corrupted text, which encourages broad language understanding and generation."},
+      {"term": "C4 dataset", "note": "A cleaned web corpus used to study large-scale pretraining for transfer learning."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "NLP had many task formats, making systems harder to compare and reuse."},
+      {"label": "Method", "note": "Use a unified encoder-decoder model and express tasks with task-specific text prefixes."},
+      {"label": "Evidence", "note": "The paper evaluates many choices and reports strong results across broad benchmarks."},
+      {"label": "Study comment", "note": "Treat this as a recipe paper: it teaches how data, objectives, scale, and formatting interact."}
+    ],
+    "pitfalls": ["Reading it as one single model result only. Much of the value is the ablation-style comparison.", "Missing that text-to-text makes evaluation convenient but still requires task-specific metrics."],
+    "practice": ["Rewrite five NLP tasks as T5-style text-to-text examples.", "Compare BERT, GPT, and T5 in a three-column architecture table."]
+  },
+  {
+    "slug": "gpt-3",
+    "before": ["Review decoder-only language modeling and next-token prediction.", "Understand zero-shot, one-shot, and few-shot evaluation settings."],
+    "roadmap": [
+      {"step": "Read the evaluation protocol carefully", "comment": "GPT-3's key claim depends on in-context examples rather than gradient updates at test time."},
+      {"step": "Track scale versus behavior", "comment": "Ask which abilities improve smoothly with scale and which remain unreliable."},
+      {"step": "Read limitations after results", "comment": "The paper itself discusses weaknesses, bias, misuse, and poor performance on some reasoning tasks."}
+    ],
+    "concepts": [
+      {"term": "In-context learning", "note": "The model appears to infer a task pattern from examples placed in the prompt."},
+      {"term": "Few-shot prompting", "note": "A few input-output examples are included before the test question."},
+      {"term": "Autoregressive modeling", "note": "The model predicts the next token from previous tokens, which makes it naturally generative."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Fine-tuning every task is costly and creates many separate models."},
+      {"label": "Method", "note": "Scale a decoder-only Transformer to 175B parameters and evaluate many tasks through prompts."},
+      {"label": "Evidence", "note": "The paper reports broad few-shot gains, but also documents areas where scaling alone is insufficient."},
+      {"label": "Study comment", "note": "Do not confuse in-context learning with true weight updates. The model parameters are unchanged during prompting."}
+    ],
+    "pitfalls": ["Thinking GPT-3 was already a modern aligned chat assistant. It was a base/few-shot model.", "Assuming bigger always means reliable. The paper shows impressive breadth and serious limitations."],
+    "practice": ["Design a zero-shot and few-shot prompt for the same task and compare expected behavior.", "Explain why GPT-3 made prompt engineering important."]
+  },
+  {
+    "slug": "scaling-laws",
+    "before": ["Review log-log plots, power laws, and basic language modeling loss.", "Understand the three resource axes: parameters, dataset tokens, and compute."],
+    "roadmap": [
+      {"step": "Read for relationships, not architecture", "comment": "This paper studies empirical laws across training runs rather than proposing a new model."},
+      {"step": "Focus on loss curves", "comment": "The central claim is predictable improvement with scale under certain regimes."},
+      {"step": "Compare later with Chinchilla", "comment": "Chinchilla revises how data and model size should be balanced for a compute budget."}
+    ],
+    "concepts": [
+      {"term": "Power law", "note": "A smooth relationship where loss improves predictably as scale increases."},
+      {"term": "Compute budget", "note": "The total training resources available, often approximated by model size times tokens."},
+      {"term": "Undertraining", "note": "A model can be too large for the amount of data or compute used to train it."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Large training runs are expensive, so researchers need ways to predict returns before spending compute."},
+      {"label": "Method", "note": "Train many models at different scales and fit empirical laws for loss."},
+      {"label": "Evidence", "note": "The smoothness of the scaling curves is the result to inspect, more than any single model."},
+      {"label": "Study comment", "note": "This is a measurement paper. Ask what is being measured and what is left out, such as safety or reasoning quality."}
+    ],
+    "pitfalls": ["Treating loss as equal to user usefulness.", "Forgetting that data quality and post-training can change final behavior."],
+    "practice": ["Explain why a smaller, better-trained model can beat a larger undertrained model.", "Draw a tradeoff triangle between parameters, data, and compute."]
+  },
+  {
+    "slug": "chinchilla",
+    "before": ["Read the Scaling Laws paper first if possible.", "Understand why training tokens and model parameters both consume compute."],
+    "roadmap": [
+      {"step": "Start with the compute-optimal question", "comment": "The paper asks how to spend a fixed training budget, not how to maximize size."},
+      {"step": "Compare Chinchilla to Gopher", "comment": "The headline lesson comes from a smaller model trained on many more tokens."},
+      {"step": "Read the recommendation cautiously", "comment": "The exact ratio is less important than the idea that many older models were data-starved."}
+    ],
+    "concepts": [
+      {"term": "Compute-optimal training", "note": "Choose model size and data size to get the best result for a fixed compute budget."},
+      {"term": "Token budget", "note": "The number of training tokens is a major scaling variable, not a detail."},
+      {"term": "Data efficiency", "note": "Quality per unit compute depends on both architecture and training data."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Scaling often emphasized larger parameter counts, but many models were not trained on enough data."},
+      {"label": "Method", "note": "Run many experiments to estimate the best parameter-token balance under compute limits."},
+      {"label": "Evidence", "note": "Chinchilla's strong performance supports the claim that more tokens can beat more parameters."},
+      {"label": "Study comment", "note": "When reading model announcements, always ask: how many parameters and how many training tokens?"}
+    ],
+    "pitfalls": ["Reducing the paper to a single ratio. The broader point is resource allocation.", "Ignoring data quality; more tokens are helpful only when the data is useful."],
+    "practice": ["Given a fixed compute budget, argue whether you would increase parameters or tokens.", "Compare GPT-3 and Chinchilla-era thinking about scale."]
+  },
+  {
+    "slug": "instructgpt",
+    "before": ["Know supervised fine-tuning, reward models, and the rough idea of reinforcement learning.", "Review the difference between a base model and an assistant model."],
+    "roadmap": [
+      {"step": "Read the three-stage pipeline", "comment": "Demonstrations, preference ranking, and PPO are the skeleton of the paper."},
+      {"step": "Track the evaluation method", "comment": "Human preference is the main signal, so labeler instructions and prompt distribution matter."},
+      {"step": "Compare model size versus preference", "comment": "A smaller aligned model can be preferred over a larger base model."}
+    ],
+    "concepts": [
+      {"term": "Supervised fine-tuning", "note": "Train on examples of desired assistant behavior."},
+      {"term": "Reward model", "note": "A model trained to predict which output humans prefer."},
+      {"term": "RLHF", "note": "Use human preference data to optimize a language model toward preferred behavior."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Base LMs are good at continuation, but user-facing assistants need to follow instructions."},
+      {"label": "Method", "note": "Use human demonstrations and rankings to shape GPT-3 into an instruction-following model."},
+      {"label": "Evidence", "note": "Human evaluators preferred InstructGPT outputs to GPT-3 outputs in many settings."},
+      {"label": "Study comment", "note": "This paper explains why product-grade LLMs are not just pretrained models with a chat UI."}
+    ],
+    "pitfalls": ["Thinking RLHF guarantees truth. It optimizes preference, which can reward style as well as substance.", "Ignoring the role of data collection and labeler guidelines."],
+    "practice": ["Sketch the RLHF pipeline from prompt to final tuned model.", "Write two outputs for a prompt and define which one a reward model should prefer and why."]
+  },
+  {
+    "slug": "chain-of-thought",
+    "before": ["Understand few-shot prompting and basic arithmetic/reasoning benchmarks.", "Know that LLMs generate token sequences, so intermediate text can guide later tokens."],
+    "roadmap": [
+      {"step": "Compare standard and CoT prompts", "comment": "The only change is including reasoning steps in the examples, which makes the effect striking."},
+      {"step": "Watch the scale dependence", "comment": "The paper emphasizes that chain-of-thought works best for sufficiently large models."},
+      {"step": "Read examples before tables", "comment": "Seeing one solved problem makes the method easier to understand than starting with metrics."}
+    ],
+    "concepts": [
+      {"term": "Reasoning trace", "note": "Intermediate natural-language steps that connect the question to the answer."},
+      {"term": "Elicitation", "note": "The capability may already exist partly in the model, but the prompt format makes it visible."},
+      {"term": "Faithfulness risk", "note": "A generated explanation can be plausible even when the model's answer is wrong."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Standard prompting often asks the model to jump directly to an answer."},
+      {"label": "Method", "note": "Provide few-shot examples that include step-by-step reasoning before final answers."},
+      {"label": "Evidence", "note": "Large models improve on arithmetic, symbolic, and commonsense reasoning tasks."},
+      {"label": "Study comment", "note": "Use this paper to separate answer quality from process quality. Both need evaluation."}
+    ],
+    "pitfalls": ["Assuming every reasoning trace is true.", "Using chain-of-thought when a concise direct answer or tool verification is better."],
+    "practice": ["Create a standard prompt and a CoT prompt for the same word problem.", "Mark which steps in a model solution are necessary versus decorative."]
+  },
+  {
+    "slug": "rag",
+    "before": ["Review dense retrieval, embeddings, and sequence-to-sequence generation.", "Understand the problem of factual knowledge stored only in model parameters."],
+    "roadmap": [
+      {"step": "Separate parametric and non-parametric memory", "comment": "The generator is parametric memory; the retrieved Wikipedia index is external memory."},
+      {"step": "Read the two RAG variants", "comment": "One conditions on the same passages throughout generation; the other can vary passages by token."},
+      {"step": "Connect to modern apps", "comment": "Most document assistants are descendants of this retrieve-then-generate pattern."}
+    ],
+    "concepts": [
+      {"term": "Retriever", "note": "Finds relevant documents or passages before generation."},
+      {"term": "Grounding", "note": "Giving the model source text so answers can be tied to evidence."},
+      {"term": "Provenance", "note": "The ability to identify where an answer came from."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Language models can store facts but struggle to update knowledge and cite evidence."},
+      {"label": "Method", "note": "Combine a pretrained generator with a dense index accessed by a neural retriever."},
+      {"label": "Evidence", "note": "The paper reports better open-domain QA and more specific factual generation."},
+      {"label": "Study comment", "note": "In real systems, retrieval quality often dominates answer quality. Do not only tune the generator."}
+    ],
+    "pitfalls": ["Thinking RAG automatically prevents hallucination.", "Ignoring chunking, ranking, citation display, and stale documents."],
+    "practice": ["Design a RAG flow for a course textbook and list where errors can enter.", "Compare parametric memory versus retrieved memory with examples."]
+  },
+  {
+    "slug": "lora",
+    "before": ["Know full fine-tuning and why updating all parameters of a large model is expensive.", "Review matrix rank and low-rank factorization at a conceptual level."],
+    "roadmap": [
+      {"step": "Start with the frozen-base idea", "comment": "LoRA does not replace the model; it adds small trainable update matrices."},
+      {"step": "Read where LoRA is inserted", "comment": "Attention projection matrices are common targets because small updates can strongly affect behavior."},
+      {"step": "Track deployment implications", "comment": "Multiple adapters can share one base model, which matters for storage and serving."}
+    ],
+    "concepts": [
+      {"term": "Low-rank update", "note": "Represent a weight change with two smaller matrices instead of a full matrix."},
+      {"term": "Adapter", "note": "A small set of trained parameters attached to a frozen pretrained model."},
+      {"term": "Rank", "note": "Controls the capacity of the update; higher rank can express more but costs more."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Full fine-tuning large models is memory-heavy and hard to store for many tasks."},
+      {"label": "Method", "note": "Freeze base weights and train low-rank matrices that add task-specific updates."},
+      {"label": "Evidence", "note": "LoRA matches or approaches full fine-tuning on several tasks with far fewer trainable parameters."},
+      {"label": "Study comment", "note": "Think of LoRA as learning a small steering layer, not relearning the whole model."}
+    ],
+    "pitfalls": ["Assuming LoRA solves bad data. It only changes how efficiently you adapt.", "Choosing rank blindly without evaluating quality, speed, and memory."],
+    "practice": ["Draw a full weight update and a low-rank update side by side.", "List when you would choose prompting, RAG, LoRA, or full fine-tuning."]
+  },
+  {
+    "slug": "llama",
+    "before": ["Review decoder-only Transformers and Chinchilla-style token scaling.", "Know the difference between open weights, open source, and open data."],
+    "roadmap": [
+      {"step": "Read the training recipe", "comment": "LLaMA's importance is not a new block, but a strong efficient foundation-model recipe."},
+      {"step": "Compare model sizes", "comment": "Notice how smaller well-trained models can compete with larger older models."},
+      {"step": "Connect to ecosystem impact", "comment": "This paper matters because it enabled a wave of open model adaptation and research."}
+    ],
+    "concepts": [
+      {"term": "Foundation model", "note": "A broadly pretrained model intended to be adapted for many downstream tasks."},
+      {"term": "Open-weight ecosystem", "note": "Researchers can inspect, fine-tune, and deploy model weights more directly."},
+      {"term": "Training recipe", "note": "Data mixture, token count, architecture details, and optimization choices together determine quality."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "High-performing LLMs were often closed, limiting reproducible research and customization."},
+      {"label": "Method", "note": "Train several efficient decoder-only models on public data with a strong token budget."},
+      {"label": "Evidence", "note": "LLaMA models were competitive with larger prior models on many benchmarks."},
+      {"label": "Study comment", "note": "Separate base capability from instruction tuning. LLaMA base is not the same as a chat assistant."}
+    ],
+    "pitfalls": ["Equating open weights with no restrictions or no deployment risk.", "Ignoring data governance and license details."],
+    "practice": ["Make a timeline from GPT-3 to Chinchilla to LLaMA.", "Explain why open weights accelerated LoRA and instruction-tuning work."]
+  },
+  {
+    "slug": "dpo",
+    "before": ["Read InstructGPT or know the RLHF reward-model pipeline.", "Understand preference pairs: one response is chosen over another for the same prompt."],
+    "roadmap": [
+      {"step": "Start with the motivation", "comment": "DPO is attractive because PPO-style RLHF is complex and unstable."},
+      {"step": "Read the objective conceptually", "comment": "The model is trained to increase preferred outputs relative to rejected outputs while staying near a reference model."},
+      {"step": "Compare to RLHF", "comment": "Ask what is removed: explicit reward-model training and online RL sampling."}
+    ],
+    "concepts": [
+      {"term": "Preference pair", "note": "A prompt with a chosen answer and a rejected answer."},
+      {"term": "Reference model", "note": "A baseline model used to prevent the tuned policy from drifting too far."},
+      {"term": "Implicit reward", "note": "DPO uses the model probabilities to represent preference optimization without an explicit reward model."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "RLHF can work well but is operationally heavy and sensitive to hyperparameters."},
+      {"label": "Method", "note": "Optimize a classification-like loss over preference pairs using a reference policy."},
+      {"label": "Evidence", "note": "The paper reports competitive or better preference tuning with simpler training."},
+      {"label": "Study comment", "note": "DPO is not magic alignment. It is only as good as the preference data and evaluation."}
+    ],
+    "pitfalls": ["Thinking DPO removes the need for human judgment.", "Forgetting that preference data can encode bias, style preference, or shallow helpfulness."],
+    "practice": ["Write a small preference pair and explain which answer should be chosen.", "Compare SFT, RLHF, and DPO in one table."]
+  },
+  {
+    "slug": "react",
+    "before": ["Know chain-of-thought prompting and basic tool-use loops.", "Understand that an environment can return observations after actions."],
+    "roadmap": [
+      {"step": "Read example trajectories first", "comment": "The thought-action-observation pattern is clearer in examples than in abstract description."},
+      {"step": "Separate reasoning and acting", "comment": "Reasoning tracks plan and state; acting obtains new information or changes the environment."},
+      {"step": "Look for failure modes", "comment": "Agents can recover from mistakes, but they can also loop or act on bad assumptions."}
+    ],
+    "concepts": [
+      {"term": "Thought", "note": "A short internal-looking reasoning step that decides what to do next."},
+      {"term": "Action", "note": "A tool call, search query, environment move, or API operation."},
+      {"term": "Observation", "note": "The returned result that updates the next reasoning step."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Reasoning-only prompts cannot fetch missing facts or interact with environments."},
+      {"label": "Method", "note": "Interleave reasoning traces with actions and observations."},
+      {"label": "Evidence", "note": "The paper shows gains on question answering and interactive decision tasks."},
+      {"label": "Study comment", "note": "This is the simplest mental model for many modern agents: think, act, observe, repeat."}
+    ],
+    "pitfalls": ["Letting the agent reason too long without checking the world.", "Assuming visible thoughts are always faithful or safe to expose."],
+    "practice": ["Write a ReAct trace for answering a factual question with search.", "Identify where tool permissions and safety checks belong in the loop."]
+  },
+  {
+    "slug": "toolformer",
+    "before": ["Understand language modeling likelihood and few-shot prompting.", "Know examples of tools: calculator, search, translation system, calendar, database."],
+    "roadmap": [
+      {"step": "Read the self-labeling idea", "comment": "Toolformer proposes tool calls, keeps the calls that improve prediction, and trains on them."},
+      {"step": "Track each tool's role", "comment": "Different tools solve different weaknesses: arithmetic, factual lookup, dates, translations."},
+      {"step": "Compare with ReAct", "comment": "ReAct is a prompting/control pattern; Toolformer studies learning tool-use behavior."}
+    ],
+    "concepts": [
+      {"term": "API call token", "note": "The model learns to emit structured calls in the middle of text."},
+      {"term": "Self-supervision", "note": "The model creates candidate tool-use examples and filters them using its own likelihood signal."},
+      {"term": "Tool augmentation", "note": "External systems extend what the language model can reliably do."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Plain LMs are weak at exact arithmetic, fresh facts, and other tool-friendly tasks."},
+      {"label": "Method", "note": "Generate and filter tool-call examples, then fine-tune the model to use tools when helpful."},
+      {"label": "Evidence", "note": "Tool use improves selected tasks without destroying general language ability."},
+      {"label": "Study comment", "note": "Tool use is partly a modeling problem and partly an interface/security problem."}
+    ],
+    "pitfalls": ["Assuming tools are always correct or safe.", "Ignoring tool schemas; badly designed APIs make model behavior brittle."],
+    "practice": ["Design a JSON schema for a calculator tool and a web-search tool.", "Write an example where the model should not call a tool."]
+  },
+  {
+    "slug": "flashattention",
+    "before": ["Review attention memory cost and GPU memory hierarchy at a high level.", "Know that moving data between memory levels can dominate runtime."],
+    "roadmap": [
+      {"step": "Start with IO-awareness", "comment": "The paper's key idea is about memory reads/writes, not approximating attention."},
+      {"step": "Understand tiling", "comment": "Blocks of computation are kept in fast memory so the full attention matrix need not be materialized."},
+      {"step": "Connect to model capability", "comment": "Faster exact attention enables longer contexts, larger batches, and cheaper training."}
+    ],
+    "concepts": [
+      {"term": "Exact attention", "note": "Produces the same mathematical attention result rather than an approximation."},
+      {"term": "Tiling", "note": "Break computation into blocks that fit in fast SRAM."},
+      {"term": "Online softmax", "note": "Compute softmax safely across blocks without storing the full matrix."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Standard attention can waste memory bandwidth by materializing large intermediate matrices."},
+      {"label": "Method", "note": "Reorder attention computation to reduce high-bandwidth-memory traffic."},
+      {"label": "Evidence", "note": "The paper reports speed and memory improvements while preserving exactness."},
+      {"label": "Study comment", "note": "This paper is a reminder that LLM progress depends on systems work, not only model ideas."}
+    ],
+    "pitfalls": ["Calling FlashAttention a new attention approximation.", "Ignoring hardware assumptions when comparing speedups."],
+    "practice": ["Explain why storing an N by N attention matrix is expensive for long contexts.", "Compare algorithmic complexity and practical IO cost."]
+  },
+  {
+    "slug": "mamba",
+    "before": ["Know why attention is quadratic in sequence length.", "Review the idea of recurrent state: a compact memory updated as tokens arrive."],
+    "roadmap": [
+      {"step": "Read the selective state idea", "comment": "Mamba makes state updates input-dependent, so it can choose what to remember."},
+      {"step": "Compare with attention", "comment": "Attention stores pairwise token access; Mamba compresses history into state."},
+      {"step": "Look at modalities", "comment": "The paper evaluates beyond language, which helps explain the general sequence-model claim."}
+    ],
+    "concepts": [
+      {"term": "State-space model", "note": "A sequence model that updates a hidden state over time using structured dynamics."},
+      {"term": "Selective scan", "note": "A hardware-aware way to compute input-dependent state updates efficiently."},
+      {"term": "Linear-time sequence modeling", "note": "Processing cost grows roughly linearly with sequence length instead of quadratically."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Transformers are powerful but expensive for very long sequences."},
+      {"label": "Method", "note": "Use selective state spaces and efficient scan kernels as a new sequence backbone."},
+      {"label": "Evidence", "note": "The paper reports strong performance across language, audio, and genomics-style sequences."},
+      {"label": "Study comment", "note": "Ask what is gained by compression and what is lost without explicit pairwise attention."}
+    ],
+    "pitfalls": ["Thinking Mamba simply replaces Transformers everywhere.", "Forgetting that ecosystem tooling and post-training recipes still matter."],
+    "practice": ["Draw attention and state-space memory as two different ways to access past tokens.", "List tasks where explicit retrieval of earlier tokens might still help."]
+  },
+  {
+    "slug": "llm-education-survey",
+    "before": ["Know basic LLM capabilities: generation, summarization, feedback, dialogue, and retrieval.", "Have one education use case in mind, such as tutoring, grading, or study planning."],
+    "roadmap": [
+      {"step": "Read the taxonomy first", "comment": "A survey is a map. Start by understanding categories before details."},
+      {"step": "Connect each category to stakeholders", "comment": "Ask whether the beneficiary is a student, teacher, administrator, or researcher."},
+      {"step": "Track risks beside opportunities", "comment": "Education has high trust requirements, so hallucination, bias, privacy, and evaluation are central."}
+    ],
+    "concepts": [
+      {"term": "Learning outcome", "note": "A measurable change in understanding, skill, or performance."},
+      {"term": "Educational alignment", "note": "Matching model behavior to curriculum, pedagogy, and learner needs."},
+      {"term": "Human oversight", "note": "Teachers and institutions remain responsible for goals, interpretation, and safeguards."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "LLM education research is broad and fragmented across many tasks."},
+      {"label": "Method", "note": "Organize papers by application area and synthesize opportunities and challenges."},
+      {"label": "Evidence", "note": "The value is coverage and categorization, not one experiment."},
+      {"label": "Study comment", "note": "Use the paper to build your reading roadmap for AI education."}
+    ],
+    "pitfalls": ["Treating a survey as proof that every application works.", "Ignoring classroom constraints and teacher workload."],
+    "practice": ["Choose one category and find two papers to read next.", "Design an evaluation metric for an LLM study assistant."]
+  },
+  {
+    "slug": "llm-education-survey-outlook",
+    "before": ["Review major education workflows: learning support, teaching support, assessment, content design.", "Know the difference between near-term product use and long-term research vision."],
+    "roadmap": [
+      {"step": "Read current uses", "comment": "Mark which applications already have prototypes or evidence."},
+      {"step": "Read outlook sections as hypotheses", "comment": "Future directions are useful, but they still need validation."},
+      {"step": "Connect to responsible deployment", "comment": "Look for privacy, fairness, teacher control, and evaluation concerns."}
+    ],
+    "concepts": [
+      {"term": "Learning companion", "note": "An AI system that supports practice, feedback, reflection, and motivation."},
+      {"term": "Teacher augmentation", "note": "Using AI to reduce workload or improve feedback while keeping teachers in control."},
+      {"term": "Responsible AI in education", "note": "Safety, fairness, privacy, transparency, and accountability in learning contexts."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "LLM capabilities are moving faster than education institutions can evaluate them."},
+      {"label": "Method", "note": "Survey current work and propose future directions for research and practice."},
+      {"label": "Evidence", "note": "Look for patterns across applications rather than one headline result."},
+      {"label": "Study comment", "note": "When reading outlook claims, write what evidence would be needed to confirm them."}
+    ],
+    "pitfalls": ["Mistaking future potential for demonstrated learning gains.", "Forgetting that students vary in age, background, access, and motivation."],
+    "practice": ["Turn one future direction into a testable research question.", "Create a risk checklist for an LLM classroom feature."]
+  },
+  {
+    "slug": "adapting-llms-education",
+    "before": ["Know prompting, fine-tuning, retrieval augmentation, and evaluation basics.", "Pick a subject area, because adaptation differs across math, writing, science, and language learning."],
+    "roadmap": [
+      {"step": "Read capabilities and challenges together", "comment": "For every potential benefit, ask what can go wrong."},
+      {"step": "Focus on adaptation methods", "comment": "Prompting, RAG, fine-tuning, and tools each solve different education problems."},
+      {"step": "Connect to evaluation", "comment": "A model that sounds helpful may not improve learning."}
+    ],
+    "concepts": [
+      {"term": "Domain adaptation", "note": "Adjusting a general model for a subject, curriculum, age group, or institution."},
+      {"term": "Learner modeling", "note": "Representing what a student knows, misunderstands, and needs next."},
+      {"term": "Pedagogical constraint", "note": "A rule that keeps AI help aligned with teaching goals, such as not giving the final answer too early."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "General LLMs are not automatically good tutors or graders."},
+      {"label": "Method", "note": "Analyze adaptation routes and challenges for educational deployment."},
+      {"label": "Evidence", "note": "Use the paper as a framework for deciding which adaptation method fits which use case."},
+      {"label": "Study comment", "note": "The core reading question is: what must be adapted, and how will we know it worked?"}
+    ],
+    "pitfalls": ["Using a generic chatbot where curriculum grounding is required.", "Evaluating only satisfaction instead of learning progress."],
+    "practice": ["Choose an education feature and decide whether it needs prompting, RAG, fine-tuning, or tools.", "Write a rubric for good AI feedback on a student answer."]
+  },
+  {
+    "slug": "llms-education-nlp-perspective",
+    "before": ["Review NLP tasks such as dialogue, feedback generation, essay scoring, and question answering.", "Know common LLM risks: hallucination, bias, data leakage, and overconfidence."],
+    "roadmap": [
+      {"step": "Read through the NLP task lens", "comment": "Ask which classic NLP problem each education application depends on."},
+      {"step": "Track multilingual and equity issues", "comment": "Language quality affects who benefits from AI education systems."},
+      {"step": "Connect benchmarks to classrooms", "comment": "A benchmark score may not measure learning, motivation, or teacher trust."}
+    ],
+    "concepts": [
+      {"term": "Feedback generation", "note": "Producing comments that help a learner improve rather than merely judging performance."},
+      {"term": "Assessment validity", "note": "Whether a measurement truly captures the skill or knowledge it claims to measure."},
+      {"term": "Multilingual support", "note": "Adapting language tools across learner languages and cultural contexts."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Education is language-heavy, so NLP quality directly affects learning support."},
+      {"label": "Method", "note": "Analyze LLM opportunities and challenges from an NLP research perspective."},
+      {"label": "Evidence", "note": "The paper's value is conceptual synthesis across language-centered education tasks."},
+      {"label": "Study comment", "note": "For each NLP task, ask what a human teacher would consider useful, fair, and safe."}
+    ],
+    "pitfalls": ["Overtrusting fluent feedback.", "Assuming English-centric results transfer to all languages and classrooms."],
+    "practice": ["Evaluate one AI-generated feedback comment for specificity, correctness, and tone.", "Create a multilingual evaluation checklist."]
+  },
+  {
+    "slug": "chatgpt-learning-meta-analysis",
+    "before": ["Know what a meta-analysis is: a statistical synthesis of multiple studies.", "Review effect size, inclusion criteria, and publication bias."],
+    "roadmap": [
+      {"step": "Read the inclusion criteria", "comment": "The studies included determine what the conclusions can and cannot mean."},
+      {"step": "Separate outcome types", "comment": "Performance, perception, and higher-order thinking are different learning outcomes."},
+      {"step": "Inspect limitations", "comment": "Rapid model changes can make evidence age quickly."}
+    ],
+    "concepts": [
+      {"term": "Effect size", "note": "A standardized estimate of how large an intervention's impact is."},
+      {"term": "Heterogeneity", "note": "Variation across studies, contexts, subjects, and learners."},
+      {"term": "Publication bias", "note": "Positive results may be easier to publish than null or negative results."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Individual ChatGPT-in-education studies can be small or inconsistent."},
+      {"label": "Method", "note": "Aggregate empirical results to estimate broader learning-related effects."},
+      {"label": "Evidence", "note": "Look at effect sizes and subgroup analyses rather than only the overall conclusion."},
+      {"label": "Study comment", "note": "This is evidence-reading practice: scrutinize methodology before citing the headline."}
+    ],
+    "pitfalls": ["Treating meta-analysis as automatically definitive.", "Ignoring that ChatGPT versions and classroom uses change over time."],
+    "practice": ["Write three reasons two studies of ChatGPT learning might disagree.", "Design a follow-up experiment measuring transfer, not just quiz scores."]
+  },
+  {
+    "slug": "gen-mentor",
+    "before": ["Know basic multi-agent systems and intelligent tutoring systems.", "Review goal-oriented learning: a learner has a target skill and needs a path."],
+    "roadmap": [
+      {"step": "Identify each agent role", "comment": "Do not treat the system as one chatbot; map responsibilities across agents."},
+      {"step": "Follow the learner goal", "comment": "The goal should drive planning, feedback, and adaptation."},
+      {"step": "Read evaluation through tutoring quality", "comment": "Ask whether the system improves learning behavior, not only dialogue fluency."}
+    ],
+    "concepts": [
+      {"term": "Multi-agent framework", "note": "A system split into specialized model-driven components."},
+      {"term": "Goal-oriented tutoring", "note": "Instruction organized around explicit learner objectives."},
+      {"term": "Student state", "note": "The system's estimate of learner progress, gaps, and next needs."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Tutoring requires planning, diagnosis, feedback, and motivation, which can be hard for one prompt."},
+      {"label": "Method", "note": "Use multiple LLM-powered agents to coordinate tutoring tasks around goals."},
+      {"label": "Evidence", "note": "Look for whether agent decomposition improves control, personalization, or outcomes."},
+      {"label": "Study comment", "note": "When reading multi-agent papers, always ask how errors propagate between agents."}
+    ],
+    "pitfalls": ["Assuming more agents always means better tutoring.", "Ignoring observability and teacher oversight."],
+    "practice": ["Design a three-agent tutoring system for one course topic.", "Write a failure case where agents disagree and how you would resolve it."]
+  },
+  {
+    "slug": "autotutor-meets-llms",
+    "before": ["Know the difference between giving answers and tutoring through prompts, hints, and feedback.", "Review guardrails as constraints on model behavior."],
+    "roadmap": [
+      {"step": "Read the pedagogy connection", "comment": "The paper imports lessons from AutoTutor instead of treating LLM tutoring as plain chat."},
+      {"step": "Track guardrail design", "comment": "Ask how the system avoids unsafe, off-topic, or answer-giving behavior."},
+      {"step": "Evaluate interaction quality", "comment": "A good tutor should diagnose and guide, not only generate fluent explanations."}
+    ],
+    "concepts": [
+      {"term": "Tutoring move", "note": "A pedagogical action such as asking a hinting question, giving feedback, or prompting reflection."},
+      {"term": "Guardrail", "note": "A design constraint that keeps model behavior within safe and useful boundaries."},
+      {"term": "Rich pedagogy", "note": "Instructional behavior informed by learning science, not only natural conversation."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "LLMs can answer questions fluently but may not tutor effectively."},
+      {"label": "Method", "note": "Combine LLM dialogue with AutoTutor-style pedagogy and guardrails."},
+      {"label": "Evidence", "note": "Look for measures of tutoring quality, safety, and learner support."},
+      {"label": "Study comment", "note": "Read this as a design paper: the important unit is the learning interaction."}
+    ],
+    "pitfalls": ["Equating helpful explanation with effective tutoring.", "Adding guardrails without testing how learners actually interact."],
+    "practice": ["Rewrite a direct answer into three Socratic hints.", "List guardrails for a math tutor that should not simply reveal solutions."]
+  },
+  {
+    "slug": "socraticlm",
+    "before": ["Understand Socratic teaching: guide learners through questions rather than immediate answers.", "Know personalization basics: learners differ in knowledge, pace, and misconceptions."],
+    "roadmap": [
+      {"step": "Read examples of dialogue", "comment": "The value is in the quality and timing of questions."},
+      {"step": "Track personalization signals", "comment": "Ask what the system knows about the learner and how it adapts."},
+      {"step": "Evaluate frustration risk", "comment": "Socratic questioning can help, but too much questioning can block learners."}
+    ],
+    "concepts": [
+      {"term": "Socratic question", "note": "A question designed to reveal thinking and guide discovery."},
+      {"term": "Personalized teaching", "note": "Adapting explanation, difficulty, and hints to a learner's state."},
+      {"term": "Scaffolding", "note": "Temporary support that helps learners solve tasks they could not solve alone."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "LLM tutors often give direct answers instead of developing learner reasoning."},
+      {"label": "Method", "note": "Shape LLM behavior toward Socratic, personalized teaching interactions."},
+      {"label": "Evidence", "note": "Look for comparisons showing better questioning and personalized support."},
+      {"label": "Study comment", "note": "Judge whether each generated question has a learning purpose."}
+    ],
+    "pitfalls": ["Using Socratic style as endless questioning.", "Ignoring when a learner needs a direct explanation."],
+    "practice": ["Convert one homework solution into a sequence of five Socratic questions.", "Create a rule for when the tutor should stop questioning and explain."]
+  },
+  {
+    "slug": "planglow",
+    "before": ["Know personalized study planning and explainable AI basics.", "Have a concrete learning goal, deadline, and constraint in mind."],
+    "roadmap": [
+      {"step": "Read the interface/design framing", "comment": "PlanGlow is about controllable planning, not just an LLM generating a schedule."},
+      {"step": "Track explanation features", "comment": "Ask how the system tells learners why a plan was recommended."},
+      {"step": "Look for user control", "comment": "A plan is useful only if learners can adapt it to real constraints."}
+    ],
+    "concepts": [
+      {"term": "Controllable recommendation", "note": "A recommendation the user can inspect and adjust."},
+      {"term": "Explainable planning", "note": "Showing reasons behind schedule choices, priorities, or learning steps."},
+      {"term": "Study loop", "note": "Plan, act, reflect, update, then plan again."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Generic study plans are hard to trust and often fail to match learner constraints."},
+      {"label": "Method", "note": "Use an LLM-driven system with explanation and control features for personalized study planning."},
+      {"label": "Evidence", "note": "Look for whether users understand, trust, and adjust the generated plans."},
+      {"label": "Study comment", "note": "The central design question is how much control to give without overwhelming learners."}
+    ],
+    "pitfalls": ["Treating a generated schedule as automatically feasible.", "Ignoring motivation and adherence over time."],
+    "practice": ["Build a one-week study plan, then annotate why each item appears.", "Add controls a learner should have: difficulty, time, topic priority, review frequency."]
+  },
+  {
+    "slug": "classroom-simulacra",
+    "before": ["Know generative agents and student modeling basics.", "Understand that simulations are approximations, not replacements for real learners."],
+    "roadmap": [
+      {"step": "Read what is being simulated", "comment": "Identify whether the agents simulate behavior, responses, engagement, misconceptions, or social context."},
+      {"step": "Track grounding data", "comment": "A simulation is only useful if grounded in realistic context and assumptions."},
+      {"step": "Read limitations carefully", "comment": "Synthetic learners can help design, but cannot prove educational effectiveness alone."}
+    ],
+    "concepts": [
+      {"term": "Generative student agent", "note": "A model-based proxy for student behavior in a learning environment."},
+      {"term": "Contextual simulation", "note": "Behavior is shaped by course, learner profile, task, and environment."},
+      {"term": "Validation gap", "note": "The difference between plausible simulated behavior and real learner evidence."}
+    ],
+    "marginNotes": [
+      {"label": "Problem", "note": "Testing education interventions with real classrooms is slow, costly, and ethically sensitive."},
+      {"label": "Method", "note": "Build contextual student generative agents to simulate online learning behavior."},
+      {"label": "Evidence", "note": "Look for whether simulations match useful patterns and support design decisions."},
+      {"label": "Study comment", "note": "Use simulation for exploration; use real learners for validation."}
+    ],
+    "pitfalls": ["Believing simulated students are objective.", "Using synthetic behavior to justify high-stakes decisions without real evidence."],
+    "practice": ["Define three assumptions behind a simulated student persona.", "Design a validation study comparing agent behavior with real course logs."]
+  }
+]
