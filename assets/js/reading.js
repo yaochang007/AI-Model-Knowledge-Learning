@@ -1,5 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
-const ASSET_VERSION = '20260520-3';
+const ASSET_VERSION = '20260520-5';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -63,6 +63,53 @@ function renderAnnotatedMap(sections) {
     `).join('');
 }
 
+function findMarginNote(notes, label) {
+    return notes.marginNotes.find(item => item.label.toLowerCase().includes(label));
+}
+
+function renderConceptGraph(analysis, notes) {
+    const flowNodes = [
+        { label: 'Problem', note: findMarginNote(notes, 'problem')?.note },
+        { label: 'Method', note: findMarginNote(notes, 'method')?.note },
+        { label: 'Evidence', note: findMarginNote(notes, 'evidence')?.note },
+        { label: 'Use Carefully', note: notes.pitfalls[0] }
+    ].filter(item => item.note);
+
+    const conceptNodes = notes.concepts.slice(0, 3);
+    if(flowNodes.length < 3 && conceptNodes.length < 2) return '';
+
+    return `
+        <section class="analysis-slide reading-note-card reading-wide">
+            <div class="slide-number">04</div>
+            <h2>Learning Graph</h2>
+            <div class="reading-graph" aria-label="Visual concept graph">
+                <div class="reading-graph-center">
+                    <span>Paper</span>
+                    <strong>${escapeHtml(analysis.title)}</strong>
+                </div>
+                <div class="reading-graph-branch reading-graph-concepts">
+                    ${conceptNodes.map(item => `
+                        <div class="reading-graph-node">
+                            <span>Concept</span>
+                            <strong>${escapeHtml(item.term)}</strong>
+                            <p>${escapeHtml(item.note)}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="reading-graph-flow">
+                    ${flowNodes.map((item, index) => `
+                        <div class="reading-flow-step">
+                            <span>${String(index + 1).padStart(2, '0')}</span>
+                            <strong>${escapeHtml(item.label)}</strong>
+                            <p>${escapeHtml(item.note)}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </section>
+    `;
+}
+
 function renderReading(analysis, essential, notes) {
     document.title = `${analysis.title} Intensive Reading | Vue Tech SG AI Research`;
     const tags = essential?.tags || [];
@@ -103,36 +150,37 @@ function renderReading(analysis, essential, notes) {
                     ${renderRoadmap(notes.roadmap)}
                 </ol>
             </section>
+            ${renderConceptGraph(analysis, notes)}
             <section class="analysis-slide reading-note-card reading-wide">
-                <div class="slide-number">04</div>
+                <div class="slide-number">05</div>
                 <h2>Detailed Comments</h2>
                 <ul class="reading-comment-list">
                     ${renderMarginNotes(notes.marginNotes)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card reading-wide">
-                <div class="slide-number">05</div>
+                <div class="slide-number">06</div>
                 <h2>Annotated Paper Map</h2>
                 <ul class="reading-comment-list">
                     ${renderAnnotatedMap(analysis.sections)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card">
-                <div class="slide-number">06</div>
+                <div class="slide-number">07</div>
                 <h2>Common Pitfalls</h2>
                 <ul>
                     ${renderList(notes.pitfalls)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card">
-                <div class="slide-number">07</div>
+                <div class="slide-number">08</div>
                 <h2>Practice Tasks</h2>
                 <ul>
                     ${renderList(notes.practice)}
                 </ul>
             </section>
             <section class="analysis-slide reading-wide">
-                <div class="slide-number">08</div>
+                <div class="slide-number">09</div>
                 <h2>Undergraduate Reading Routine</h2>
                 <ul>
                     <li>First pass: read the abstract, figures, and conclusion, then write a three-sentence summary without looking back.</li>
