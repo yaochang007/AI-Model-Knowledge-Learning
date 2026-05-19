@@ -16,7 +16,8 @@
             'authors': 'Authors'
         };
         let essentialPapers = [];
-        const DATA_VERSION = '20260520-4';
+        let paperIndexByTitle = new Map();
+        const DATA_VERSION = '20260520-7';
         // Normalize helpers for boolean-like fields
         const normalizeBool = (val) => {
             const s = (val ?? '').toString().trim().toLowerCase();
@@ -68,6 +69,11 @@
         async function fetchEssentialPapers() {
             const response = await fetch(`data/essential-papers.json?v=${DATA_VERSION}`);
             if(!response.ok) throw new Error('Failed to load data/essential-papers.json');
+            return response.json();
+        }
+        async function fetchPaperIndex() {
+            const response = await fetch(`data/paper-index.json?v=${DATA_VERSION}`);
+            if(!response.ok) throw new Error('Failed to load data/paper-index.json');
             return response.json();
         }
         function parseCSV(text) {
@@ -493,6 +499,9 @@
                     const group = paper[F('group')] ? escapeHtml(paper[F('group')]) : '';
                     const category = paper[F('category')] ? escapeHtml(paper[F('category')]) : '';
                     const type = paper[F('type')] ? escapeHtml(paper[F('type')]) : '';
+                    const indexedPaper = paperIndexByTitle.get(normalizeTitle(paper[F('title')]));
+                    const analysisPath = indexedPaper ? `analysis.html?paper=${encodeURIComponent(indexedPaper.slug)}` : '';
+                    const readingPath = indexedPaper ? `reading.html?paper=${encodeURIComponent(indexedPaper.slug)}` : '';
 
                     return `
                         <article class="paper-card">
@@ -510,7 +519,11 @@
                                     ${category ? `<span class="tag">${category}</span>` : ''}
                                     ${type ? `<span class="tag">${type}</span>` : ''}
                                 </div>
-                                ${link ? `<a href="${escapeHtml(link)}" target="_blank" class="paper-link">View Paper <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                                <div class="paper-card-actions">
+                                    ${analysisPath ? `<a href="${escapeHtml(analysisPath)}" class="paper-link"><i class="fa-solid fa-chart-simple"></i> Analysis</a>` : ''}
+                                    ${readingPath ? `<a href="${escapeHtml(readingPath)}" class="paper-link"><i class="fa-solid fa-book-open-reader"></i> Intensive Reading</a>` : ''}
+                                    ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="paper-link">Source <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                                </div>
                             </div>
                         </article>
                     `;
@@ -578,10 +591,11 @@
             }).join('');
         }
         // Initialize
-        Promise.all([fetchCSV(), fetchEssentialPapers()]).then(([papers, essentials]) => {
+        Promise.all([fetchCSV(), fetchEssentialPapers(), fetchPaperIndex()]).then(([papers, essentials, paperIndex]) => {
             if(!papers || !papers.length) throw new Error('No data');
             allPapers = papers;
             essentialPapers = essentials || [];
+            paperIndexByTitle = new Map((paperIndex || []).map(item => [normalizeTitle(item.title), item]));
 
             // Build header map
             const headerSet = new Set();

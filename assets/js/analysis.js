@@ -1,4 +1,5 @@
 const deck = document.getElementById('analysisDeck');
+const DATA_VERSION = '20260520-7';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -10,11 +11,16 @@ const getPaperSlug = () => new URLSearchParams(window.location.search).get('pape
 
 function renderAnalysis(paper) {
     document.title = `${paper.title} | Vue Tech SG AI Research`;
+    const sourceUrl = paper.sourceUrl || '';
     deck.innerHTML = `
         <article class="analysis-hero">
             <div class="analysis-eyebrow">${escapeHtml(paper.venue)} ${escapeHtml(paper.year)}</div>
             <h1>${escapeHtml(paper.title)}</h1>
             <p>${escapeHtml(paper.subtitle)}</p>
+            <div class="reading-actions">
+                <a class="paper-link" href="reading.html?paper=${encodeURIComponent(paper.slug)}"><i class="fa-solid fa-book-open-reader"></i> Intensive Reading</a>
+                ${sourceUrl ? `<a class="paper-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Source</a>` : ''}
+            </div>
         </article>
         <div class="analysis-slides">
             ${paper.sections.map((section, index) => `
@@ -28,12 +34,12 @@ function renderAnalysis(paper) {
             `).join('')}
         </div>
         <div class="analysis-bottom-nav">
-            <a class="paper-link" href="./#essential-papers"><i class="fa-solid fa-arrow-left"></i> Back to Essential Papers</a>
+            <a class="paper-link" href="./#paperList"><i class="fa-solid fa-arrow-left"></i> Back to Papers</a>
         </div>
     `;
 }
 
-fetch('data/paper-analyses.json')
+fetch(`data/paper-analyses.json?v=${DATA_VERSION}`)
     .then(response => {
         if(!response.ok) throw new Error('Failed to load paper analyses');
         return response.json();
@@ -48,7 +54,7 @@ fetch('data/paper-analyses.json')
         deck.innerHTML = `
             <div class="empty-state">
                 <p>Failed to load this analysis.</p>
-                <a class="paper-link" href="./#essential-papers">Back to Essential Papers</a>
+                <a class="paper-link" href="./#paperList">Back to Papers</a>
             </div>
         `;
         console.error(error);

@@ -1,5 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
-const ASSET_VERSION = '20260520-6';
+const ASSET_VERSION = '20260520-7';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -71,10 +71,12 @@ function renderFigureCards(figures, slideNumber) {
             <div class="slide-number">${String(slideNumber).padStart(2, '0')}</div>
             <h2>Key Paper Figures</h2>
             <div class="paper-figure-list">
-                ${figures.map(figure => `
+                ${figures.map((figure, index) => `
                     <article class="paper-figure-card">
                         <figure>
-                            <img src="${escapeHtml(figure.imagePath)}?v=${ASSET_VERSION}" alt="${escapeHtml(figure.title)}">
+                            <button class="paper-figure-zoom" type="button" data-figure-index="${index}" aria-label="Open ${escapeHtml(figure.title)} larger">
+                                <img src="${escapeHtml(figure.imagePath)}?v=${ASSET_VERSION}" alt="${escapeHtml(figure.title)}" loading="lazy">
+                            </button>
                             <figcaption>
                                 <strong>${escapeHtml(figure.title)}</strong>
                                 <span>${escapeHtml(figure.sourceLabel)} - ${escapeHtml(figure.caption)}</span>
@@ -91,6 +93,72 @@ function renderFigureCards(figures, slideNumber) {
             </div>
         </section>
     `;
+}
+
+function ensureFigureLightbox() {
+    let lightbox = document.getElementById('figureLightbox');
+    if(lightbox) return lightbox;
+
+    document.body.insertAdjacentHTML('beforeend', `
+        <div class="figure-lightbox hidden" id="figureLightbox" role="dialog" aria-modal="true" aria-label="Expanded paper figure">
+            <div class="figure-lightbox-panel">
+                <button class="figure-lightbox-close" type="button" aria-label="Close expanded figure">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="figure-lightbox-image-wrap">
+                    <img class="figure-lightbox-image" alt="">
+                </div>
+                <div class="figure-lightbox-caption"></div>
+            </div>
+        </div>
+    `);
+
+    lightbox = document.getElementById('figureLightbox');
+    const closeButton = lightbox.querySelector('.figure-lightbox-close');
+    const image = lightbox.querySelector('.figure-lightbox-image');
+
+    const closeLightbox = () => {
+        lightbox.classList.add('hidden');
+        document.body.classList.remove('lightbox-open');
+        image.removeAttribute('src');
+    };
+
+    closeButton.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', event => {
+        if(event.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', event => {
+        if(event.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox();
+    });
+
+    return lightbox;
+}
+
+function bindFigureLightbox(figures) {
+    const buttons = readingDeck.querySelectorAll('.paper-figure-zoom');
+    if(!buttons.length) return;
+
+    const lightbox = ensureFigureLightbox();
+    const image = lightbox.querySelector('.figure-lightbox-image');
+    const caption = lightbox.querySelector('.figure-lightbox-caption');
+    const closeButton = lightbox.querySelector('.figure-lightbox-close');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            const figure = figures[Number(button.dataset.figureIndex)];
+            if(!figure) return;
+
+            image.src = `${figure.imagePath}?v=${ASSET_VERSION}`;
+            image.alt = figure.title;
+            caption.innerHTML = `
+                <strong>${escapeHtml(figure.title)}</strong>
+                <span>${escapeHtml(figure.sourceLabel)} - ${escapeHtml(figure.caption)}</span>
+            `;
+            lightbox.classList.remove('hidden');
+            document.body.classList.add('lightbox-open');
+            closeButton.focus();
+        });
+    });
 }
 
 function findMarginNote(notes, label) {
@@ -230,9 +298,10 @@ function renderReading(analysis, essential, notes, figureData) {
         </div>
         <div class="analysis-bottom-nav">
             <a class="paper-link" href="analysis.html?paper=${encodeURIComponent(analysis.slug)}"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
-            <a class="paper-link" href="./#essential-papers"><i class="fa-solid fa-arrow-left"></i> Back to Essential Papers</a>
+            <a class="paper-link" href="./#paperList"><i class="fa-solid fa-arrow-left"></i> Back to Papers</a>
         </div>
     `;
+    bindFigureLightbox(figures);
 }
 
 Promise.all([
@@ -254,7 +323,7 @@ Promise.all([
         readingDeck.innerHTML = `
             <div class="empty-state">
                 <p>Failed to load these reading notes.</p>
-                <a class="paper-link" href="./#essential-papers">Back to Essential Papers</a>
+                <a class="paper-link" href="./#paperList">Back to Papers</a>
             </div>
         `;
         console.error(error);

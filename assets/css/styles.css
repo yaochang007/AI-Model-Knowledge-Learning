@@ -732,6 +732,13 @@ body.dark .llm-badge {
     border-top: 1px solid var(--border);
 }
 
+.paper-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
 .paper-tags {
     display: flex;
     flex-wrap: wrap;
@@ -1051,10 +1058,26 @@ body.dark .llm-badge {
     margin: 0;
 }
 
+.paper-figure-zoom {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+    text-align: inherit;
+}
+
+.paper-figure-zoom:focus-visible {
+    outline: 3px solid rgba(26, 115, 232, 0.35);
+    outline-offset: 4px;
+}
+
 .paper-figure-card img {
     display: block;
     width: 100%;
-    max-height: 620px;
+    height: auto;
+    max-height: none;
     object-fit: contain;
     background: #fff;
     border: 1px solid var(--border);
@@ -1097,6 +1120,85 @@ body.dark .llm-badge {
 
 .paper-figure-notes li + li {
     margin-top: 10px;
+}
+
+body.lightbox-open {
+    overflow: hidden;
+}
+
+.figure-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.78);
+}
+
+.figure-lightbox.hidden {
+    display: none;
+}
+
+.figure-lightbox-panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    width: min(1200px, 96vw);
+    max-height: 94vh;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+
+.figure-lightbox-close {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--background);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.figure-lightbox-close:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.figure-lightbox-image-wrap {
+    overflow: auto;
+    max-height: 78vh;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+}
+
+.figure-lightbox-image {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.figure-lightbox-caption {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.figure-lightbox-caption strong {
+    display: block;
+    color: var(--text-primary);
+    margin-bottom: 2px;
 }
 
 .reading-graph {
@@ -1258,6 +1360,16 @@ body.dark .llm-badge {
         padding: 20px 16px;
     }
 
+    .paper-card-actions {
+        justify-content: stretch;
+        width: 100%;
+    }
+
+    .paper-card-actions .paper-link {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
     .paper-title {
         font-size: 16px;
     }
@@ -1321,10 +1433,6 @@ body.dark .llm-badge {
         grid-template-columns: 1fr;
     }
 
-    .paper-figure-card img {
-        max-height: none;
-    }
-
     .reading-graph-concepts,
     .reading-graph-flow {
         grid-template-columns: 1fr;
@@ -1337,6 +1445,15 @@ body.dark .llm-badge {
     .analysis-slide {
         min-height: auto;
         padding: 20px 18px;
+    }
+
+    .figure-lightbox {
+        padding: 12px;
+    }
+
+    .figure-lightbox-panel {
+        width: 100%;
+        padding: 12px;
     }
 }
 
