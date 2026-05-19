@@ -1,0 +1,420 @@
+[
+  {
+    "slug": "attention-is-all-you-need",
+    "figures": [
+      {
+        "title": "Transformer Model Architecture",
+        "imagePath": "assets/images/paper-figures/attention-is-all-you-need-fig1-transformer-architecture.png",
+        "sourceLabel": "Figure 1, page 3",
+        "caption": "The original encoder-decoder Transformer architecture.",
+        "explanation": [
+          "Read the left stack as the encoder: tokens become embeddings, positions are added, then repeated self-attention and feed-forward blocks build contextual representations.",
+          "Read the right stack as the decoder: it uses masked self-attention so each generated token cannot look at future target tokens.",
+          "The middle connection is encoder-decoder attention: decoder queries attend to encoder outputs so generation can condition on the input sequence.",
+          "The repeated Add & Norm boxes are residual connections plus normalization; they stabilize deep stacking and make optimization practical."
+        ]
+      },
+      {
+        "title": "Scaled Dot-Product and Multi-Head Attention",
+        "imagePath": "assets/images/paper-figures/attention-is-all-you-need-fig2-scaled-dot-product-and-multi-head-attention.png",
+        "sourceLabel": "Figure 2, page 4",
+        "caption": "How attention scores are computed and then repeated across multiple heads.",
+        "explanation": [
+          "Queries ask what information the current token needs; keys advertise what each token can provide; values carry the information that will be mixed.",
+          "Scaling before softmax keeps dot products from becoming too large when the key/query dimension grows.",
+          "Multi-head attention runs this operation several times in parallel, allowing different heads to specialize in different relationships."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "bert",
+    "figures": [
+      {
+        "title": "Pretraining and Fine-Tuning Flow",
+        "imagePath": "assets/images/paper-figures/bert-fig1-pretraining-and-finetuning.png",
+        "sourceLabel": "Figure 1, page 3",
+        "caption": "BERT first learns general language representations, then adapts the same backbone to downstream tasks.",
+        "explanation": [
+          "The left side shows pretraining: BERT learns from masked words and sentence-pair signals without task-specific labels.",
+          "The right side shows fine-tuning: task heads are lightweight, but the full BERT model is updated for the target task.",
+          "The same encoder backbone serves classification, question answering, and sentence-pair tasks, which is the main transfer-learning lesson."
+        ]
+      },
+      {
+        "title": "BERT Input Representation",
+        "imagePath": "assets/images/paper-figures/bert-fig2-input-representation.png",
+        "sourceLabel": "Figure 2, page 5",
+        "caption": "Token, segment, and position embeddings are summed before entering the Transformer encoder.",
+        "explanation": [
+          "Token embeddings identify the word pieces; position embeddings preserve order; segment embeddings distinguish sentence A from sentence B.",
+          "The [CLS] token is placed at the front so its final representation can summarize the sequence for classification.",
+          "This diagram is useful when implementing BERT-style inputs because most mistakes come from missing segment or special-token handling."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "t5",
+    "figures": [
+      {
+        "title": "Text-to-Text Framework",
+        "imagePath": "assets/images/paper-figures/t5-fig1-text-to-text-framework.png",
+        "sourceLabel": "Figure 1, page 3",
+        "caption": "T5 casts every NLP task as text input to text output.",
+        "explanation": [
+          "The prefix tells the model what task to perform, such as translation, judgment, acceptability, or summarization.",
+          "Labels are generated as text, so classification and generation share the same interface.",
+          "This framing anticipates later instruction-tuned systems: tasks become natural-language commands rather than separate model heads."
+        ]
+      },
+      {
+        "title": "Denoising Objective",
+        "imagePath": "assets/images/paper-figures/t5-fig2-denoising-objective.png",
+        "sourceLabel": "Figure 2, page 13",
+        "caption": "Corrupted spans are replaced by sentinel tokens, and the model learns to reconstruct the missing text.",
+        "explanation": [
+          "The input hides spans instead of individual tokens, forcing the model to recover larger chunks of meaning.",
+          "Sentinel tokens mark missing regions and organize the target sequence.",
+          "This objective teaches both understanding and generation, which fits the encoder-decoder architecture."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "gpt-3",
+    "figures": [
+      {
+        "title": "Zero-Shot, One-Shot, and Few-Shot Prompting",
+        "imagePath": "assets/images/paper-figures/gpt-3-fig21-zero-one-few-shot.png",
+        "sourceLabel": "Figure 2.1, page 7",
+        "caption": "Different ways to ask a language model to perform a task at inference time.",
+        "explanation": [
+          "Zero-shot uses only an instruction, so the model must infer the task from wording alone.",
+          "One-shot gives one example, which anchors the desired input-output pattern.",
+          "Few-shot gives several examples in the context window; GPT-3's key claim is that larger models use these examples increasingly well without weight updates."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "scaling-laws",
+    "figures": [
+      {
+        "title": "Language Model Scaling Laws",
+        "imagePath": "assets/images/paper-figures/scaling-laws-fig1-scaling-laws.png",
+        "sourceLabel": "Figure 1, page 3",
+        "caption": "Loss improves smoothly as compute, data, and parameter count increase.",
+        "explanation": [
+          "Each plot shows a log-log relationship, which is why the curves look close to straight lines.",
+          "The key lesson is predictability: bigger models, more data, and more compute tend to reduce loss in regular patterns.",
+          "Use this diagram to understand why later LLM work treats scaling decisions as engineering tradeoffs rather than only model-design choices."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "chinchilla",
+    "figures": [
+      {
+        "title": "Compute-Optimal Model Size",
+        "imagePath": "assets/images/paper-figures/chinchilla-fig1-compute-optimal-predictions.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "Chinchilla argues that many large models were under-trained relative to their parameter count.",
+        "explanation": [
+          "The diagonal trend compares model size against the compute-optimal frontier.",
+          "The central message is that data tokens matter as much as parameter count.",
+          "This diagram reframes scaling: for a fixed compute budget, train a smaller model on more tokens instead of only increasing parameters."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "chain-of-thought",
+    "figures": [
+      {
+        "title": "Chain-of-Thought Prompting Example",
+        "imagePath": "assets/images/paper-figures/chain-of-thought-fig1-chain-of-thought-prompting.png",
+        "sourceLabel": "Figure 1, page 1",
+        "caption": "A worked reasoning trace helps the model solve multi-step tasks.",
+        "explanation": [
+          "The standard prompt asks for an answer directly, which can fail on multi-step arithmetic or commonsense reasoning.",
+          "The chain-of-thought prompt includes intermediate reasoning before the answer.",
+          "For learners, the important point is not the wording alone; it is that examples show the model the desired reasoning format."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "rag",
+    "figures": [
+      {
+        "title": "Retrieval-Augmented Generation Overview",
+        "imagePath": "assets/images/paper-figures/rag-fig1-rag-overview.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "A retriever supplies documents that condition the generator.",
+        "explanation": [
+          "The query encoder turns the input into a retrieval query, then the retriever selects relevant documents from an external index.",
+          "The generator receives both the original query and retrieved passages, grounding its answer in outside evidence.",
+          "RAG-Sequence uses one document set for the whole answer; RAG-Token can vary documents token by token."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "lora",
+    "figures": [
+      {
+        "title": "LoRA Reparameterization",
+        "imagePath": "assets/images/paper-figures/lora-fig1-lora-reparameterization.png",
+        "sourceLabel": "Figure 1, page 1",
+        "caption": "LoRA freezes the original weight matrix and trains two low-rank adapter matrices.",
+        "explanation": [
+          "The large pretrained weight W stays frozen, so the base model does not need to be fully updated.",
+          "The trainable update is factored into A and B with rank r, making the number of trainable parameters much smaller.",
+          "At inference time, the low-rank update can be merged into the original weight path, avoiding an extra serving penalty in many setups."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "llama",
+    "figures": [
+      {
+        "title": "Training Loss Curves",
+        "imagePath": "assets/images/paper-figures/llama-fig1-training-loss.png",
+        "sourceLabel": "Figure 1, page 3",
+        "caption": "Training loss decreases smoothly across LLaMA model sizes.",
+        "explanation": [
+          "Each curve corresponds to a model size, showing how loss evolves as more training tokens are consumed.",
+          "The larger models generally reach lower loss, but the smooth curve shape also shows stable optimization.",
+          "This figure connects LLaMA to scaling-law thinking: quality comes from architecture, data, and training scale together."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "dpo",
+    "figures": [
+      {
+        "title": "DPO Compared with RLHF",
+        "imagePath": "assets/images/paper-figures/dpo-fig1-dpo-vs-rlhf.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "DPO learns from preference pairs without a separate reward model and RL loop.",
+        "explanation": [
+          "RLHF usually trains a reward model and then optimizes the policy with reinforcement learning.",
+          "DPO turns the same preference data into a direct classification-style objective over chosen and rejected responses.",
+          "The diagram is the quickest way to see why DPO is simpler operationally: fewer moving parts and no explicit reward-model optimization loop."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "react",
+    "figures": [
+      {
+        "title": "Reasoning and Acting Prompt Traces",
+        "imagePath": "assets/images/paper-figures/react-fig1-reasoning-acting.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "ReAct interleaves thoughts, actions, and observations.",
+        "explanation": [
+          "Standard prompting produces an answer directly; chain-of-thought adds reasoning but may still hallucinate.",
+          "Act-only approaches can use tools but lack explicit reasoning traces for planning and correction.",
+          "ReAct alternates thought, action, and observation, so the model can use external feedback to revise its next step."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "toolformer",
+    "figures": [
+      {
+        "title": "Tool-Use Data Generation Pipeline",
+        "imagePath": "assets/images/paper-figures/toolformer-fig2-tool-use-data-generation.png",
+        "sourceLabel": "Figure 2, page 2",
+        "caption": "Toolformer creates its own training examples for API calls.",
+        "explanation": [
+          "The language model proposes possible API calls inside normal text.",
+          "The system executes those calls and keeps only examples where the tool result improves prediction.",
+          "The final filtered data teaches the model when and how to call tools without requiring a fully hand-labeled tool-use dataset."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "flashattention",
+    "figures": [
+      {
+        "title": "FlashAttention Tiling",
+        "imagePath": "assets/images/paper-figures/flashattention-fig1-flashattention-tiling.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "FlashAttention avoids materializing the full attention matrix by tiling computation through fast memory.",
+        "explanation": [
+          "Standard attention writes a large N by N attention matrix to high-bandwidth memory, which becomes a major bottleneck.",
+          "FlashAttention tiles Q, K, and V so chunks fit in faster on-chip SRAM.",
+          "The important systems idea is IO-awareness: reducing memory traffic can be more important than reducing arithmetic."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "mamba",
+    "figures": [
+      {
+        "title": "Mamba Architecture Block",
+        "imagePath": "assets/images/paper-figures/mamba-fig3-mamba-architecture.png",
+        "sourceLabel": "Figure 3, page 8",
+        "caption": "Mamba combines selective state spaces with gating into a simplified sequence block.",
+        "explanation": [
+          "The diagram compares earlier SSM-style blocks with Mamba's simplified block.",
+          "Selection lets the model decide which information should enter or affect the recurrent state.",
+          "The architecture is designed for long sequences where attention's quadratic cost becomes expensive."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "kimi-linear",
+    "figures": [
+      {
+        "title": "Kimi Linear Architecture",
+        "imagePath": "assets/images/paper-figures/kimi-linear-fig3-kimi-linear-architecture.png",
+        "sourceLabel": "Figure 3, page 6",
+        "caption": "Kimi Linear stacks efficient token-mixing blocks that combine linear attention ideas with mixture-style routing.",
+        "explanation": [
+          "The left side shows the repeated model block structure; the right side opens up the token-mixing mechanism.",
+          "KDA is the central efficient-attention component, aiming to keep long-context computation practical.",
+          "Use this diagram to separate architecture-level choices from the systems claim: lower cache and faster long-context serving."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "llm-education-survey",
+    "figures": [
+      {
+        "title": "LLM Framework for Education Context",
+        "imagePath": "assets/images/paper-figures/llm-education-survey-fig1-llm-framework.png",
+        "sourceLabel": "Figure 1, page 1",
+        "caption": "A high-level view of LLM pretraining and fine-tuning in the broader AI stack.",
+        "explanation": [
+          "The nested circles locate LLMs inside deep learning, machine learning, and AI.",
+          "The right side separates broad pretraining from task-specific fine-tuning.",
+          "For education systems, this helps distinguish general language capability from later adaptation for classroom or tutoring tasks."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "llm-education-survey-outlook",
+    "figures": [
+      {
+        "title": "Taxonomy of LLMs for Education",
+        "imagePath": "assets/images/paper-figures/llm-education-survey-outlook-fig1-education-taxonomy.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "A taxonomy that groups education applications and representative LLM work.",
+        "explanation": [
+          "Read the left branches as application families, then scan rightward to see representative tasks and systems.",
+          "The diagram is useful for project planning because it separates student-facing support, teacher support, and broader educational infrastructure.",
+          "Use it as a checklist when asking whether a new education product is tutoring, assessment, content generation, planning, or analytics."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "adapting-llms-education",
+    "figures": [
+      {
+        "title": "Education-Related Foundational Capabilities",
+        "imagePath": "assets/images/paper-figures/adapting-llms-education-fig2-education-capabilities.png",
+        "sourceLabel": "Figure 2, page 4",
+        "caption": "A capability map for applying LLMs to educational tasks.",
+        "explanation": [
+          "The left side groups capabilities such as mathematics, writing, programming, and reasoning.",
+          "The right side lists representative benchmarks and tasks used to test those capabilities.",
+          "For learners, this diagram shows why education LLM evaluation cannot rely on one score; different classroom uses need different abilities."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "gen-mentor",
+    "figures": [
+      {
+        "title": "GenMentor System Overview",
+        "imagePath": "assets/images/paper-figures/gen-mentor-fig2-genmentor-overview.png",
+        "sourceLabel": "Figure 2, page 4",
+        "caption": "An LLM-powered multi-agent framework for goal-oriented tutoring.",
+        "explanation": [
+          "The system begins by understanding the learner state and learning goal.",
+          "Different agents handle learner modeling, goal adjustment, personalized resources, and content generation.",
+          "The diagram is best read as a tutoring workflow: diagnose, plan, generate support, observe feedback, then update the learner model."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "autotutor-meets-llms",
+    "figures": [
+      {
+        "title": "MWPTutor State Space",
+        "imagePath": "assets/images/paper-figures/autotutor-meets-llms-fig3-mwptutor-state-space.png",
+        "sourceLabel": "Figure 3, page 5",
+        "caption": "A flowchart of tutoring states for guiding math word-problem solving.",
+        "explanation": [
+          "The tutor does not simply answer; it checks alignment, initiates support, pumps for explanation, gives hints, prompts, and escalates when needed.",
+          "Decision diamonds represent checks on whether the learner's answer is correct at each step.",
+          "This diagram is valuable because it turns vague tutoring behavior into a controllable dialogue policy."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "socraticlm",
+    "figures": [
+      {
+        "title": "Question-Answering vs Thought-Provoking Teaching",
+        "imagePath": "assets/images/paper-figures/socraticlm-fig1-teaching-paradigms.png",
+        "sourceLabel": "Figure 1, page 2",
+        "caption": "A comparison between answer-giving tutoring and Socratic teaching.",
+        "explanation": [
+          "The question-answering pattern gives information directly, which can be efficient but may reduce learner effort.",
+          "The thought-provoking pattern asks guided questions so students expose and repair their own reasoning.",
+          "Use this diagram to judge whether an AI tutor is teaching the student to think or merely completing the task for them."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "planglow",
+    "figures": [
+      {
+        "title": "PlanGlow Planning Interface",
+        "imagePath": "assets/images/paper-figures/planglow-fig1-planglow-interface.png",
+        "sourceLabel": "Figure 1, page 1",
+        "caption": "The interface combines learner inputs with an explainable study-plan overview.",
+        "explanation": [
+          "The left panel collects constraints such as background, time, subject, and preferred resources.",
+          "The right panel turns those constraints into a structured plan that can be inspected and adjusted.",
+          "This diagram matters because study planning is not only generation; learners need explanation and control to trust the plan."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "classroom-simulacra",
+    "figures": [
+      {
+        "title": "Classroom Simulacra Framework",
+        "imagePath": "assets/images/paper-figures/classroom-simulacra-fig1-classroom-simulacra-framework.png",
+        "sourceLabel": "Figure 1, page 1",
+        "caption": "A framework for simulating student behavior in online education.",
+        "explanation": [
+          "The framework connects real learning inputs, student history, simulated learning behavior, and simulated outcomes.",
+          "Transferable iterative reflection is used to improve how simulated agents respond across contexts.",
+          "Read this diagram as a design tool, not a validation guarantee: simulated learners can help explore ideas, but real learner evidence remains necessary."
+        ]
+      }
+    ]
+  }
+]

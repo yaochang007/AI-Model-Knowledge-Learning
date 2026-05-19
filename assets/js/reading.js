@@ -1,5 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
-const ASSET_VERSION = '20260520-5';
+const ASSET_VERSION = '20260520-6';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -63,11 +63,41 @@ function renderAnnotatedMap(sections) {
     `).join('');
 }
 
+function renderFigureCards(figures, slideNumber) {
+    if(!figures.length) return '';
+
+    return `
+        <section class="analysis-slide reading-note-card reading-wide">
+            <div class="slide-number">${String(slideNumber).padStart(2, '0')}</div>
+            <h2>Key Paper Figures</h2>
+            <div class="paper-figure-list">
+                ${figures.map(figure => `
+                    <article class="paper-figure-card">
+                        <figure>
+                            <img src="${escapeHtml(figure.imagePath)}?v=${ASSET_VERSION}" alt="${escapeHtml(figure.title)}">
+                            <figcaption>
+                                <strong>${escapeHtml(figure.title)}</strong>
+                                <span>${escapeHtml(figure.sourceLabel)} - ${escapeHtml(figure.caption)}</span>
+                            </figcaption>
+                        </figure>
+                        <div class="paper-figure-notes">
+                            <h3>How to Read This Diagram</h3>
+                            <ul>
+                                ${renderList(figure.explanation)}
+                            </ul>
+                        </div>
+                    </article>
+                `).join('')}
+            </div>
+        </section>
+    `;
+}
+
 function findMarginNote(notes, label) {
     return notes.marginNotes.find(item => item.label.toLowerCase().includes(label));
 }
 
-function renderConceptGraph(analysis, notes) {
+function renderConceptGraph(analysis, notes, slideNumber) {
     const flowNodes = [
         { label: 'Problem', note: findMarginNote(notes, 'problem')?.note },
         { label: 'Method', note: findMarginNote(notes, 'method')?.note },
@@ -80,7 +110,7 @@ function renderConceptGraph(analysis, notes) {
 
     return `
         <section class="analysis-slide reading-note-card reading-wide">
-            <div class="slide-number">04</div>
+            <div class="slide-number">${String(slideNumber).padStart(2, '0')}</div>
             <h2>Learning Graph</h2>
             <div class="reading-graph" aria-label="Visual concept graph">
                 <div class="reading-graph-center">
@@ -110,11 +140,18 @@ function renderConceptGraph(analysis, notes) {
     `;
 }
 
-function renderReading(analysis, essential, notes) {
+function renderReading(analysis, essential, notes, figureData) {
     document.title = `${analysis.title} Intensive Reading | Vue Tech SG AI Research`;
     const tags = essential?.tags || [];
     const pdfPath = essential?.pdfPath;
     const sourceUrl = essential?.sourceUrl || analysis.sourceUrl;
+    const figures = figureData?.figures || [];
+    const graphSlide = figures.length ? 5 : 4;
+    const detailSlide = graphSlide + 1;
+    const annotatedSlide = graphSlide + 2;
+    const pitfallsSlide = graphSlide + 3;
+    const practiceSlide = graphSlide + 4;
+    const routineSlide = graphSlide + 5;
 
     readingDeck.innerHTML = `
         <article class="analysis-hero">
@@ -150,37 +187,38 @@ function renderReading(analysis, essential, notes) {
                     ${renderRoadmap(notes.roadmap)}
                 </ol>
             </section>
-            ${renderConceptGraph(analysis, notes)}
+            ${renderFigureCards(figures, 4)}
+            ${renderConceptGraph(analysis, notes, graphSlide)}
             <section class="analysis-slide reading-note-card reading-wide">
-                <div class="slide-number">05</div>
+                <div class="slide-number">${String(detailSlide).padStart(2, '0')}</div>
                 <h2>Detailed Comments</h2>
                 <ul class="reading-comment-list">
                     ${renderMarginNotes(notes.marginNotes)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card reading-wide">
-                <div class="slide-number">06</div>
+                <div class="slide-number">${String(annotatedSlide).padStart(2, '0')}</div>
                 <h2>Annotated Paper Map</h2>
                 <ul class="reading-comment-list">
                     ${renderAnnotatedMap(analysis.sections)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card">
-                <div class="slide-number">07</div>
+                <div class="slide-number">${String(pitfallsSlide).padStart(2, '0')}</div>
                 <h2>Common Pitfalls</h2>
                 <ul>
                     ${renderList(notes.pitfalls)}
                 </ul>
             </section>
             <section class="analysis-slide reading-note-card">
-                <div class="slide-number">08</div>
+                <div class="slide-number">${String(practiceSlide).padStart(2, '0')}</div>
                 <h2>Practice Tasks</h2>
                 <ul>
                     ${renderList(notes.practice)}
                 </ul>
             </section>
             <section class="analysis-slide reading-wide">
-                <div class="slide-number">09</div>
+                <div class="slide-number">${String(routineSlide).padStart(2, '0')}</div>
                 <h2>Undergraduate Reading Routine</h2>
                 <ul>
                     <li>First pass: read the abstract, figures, and conclusion, then write a three-sentence summary without looking back.</li>
@@ -200,15 +238,17 @@ function renderReading(analysis, essential, notes) {
 Promise.all([
     fetchJson('data/paper-analyses.json'),
     fetchJson('data/essential-papers.json'),
-    fetchJson('data/paper-study-notes.json')
+    fetchJson('data/paper-study-notes.json'),
+    fetchJson('data/paper-figures.json')
 ])
-    .then(([analyses, essentials, studyNotes]) => {
+    .then(([analyses, essentials, studyNotes, paperFigures]) => {
         const slug = getPaperSlug();
         const analysis = analyses.find(item => item.slug === slug) || analyses[0];
         const essential = essentials.find(item => item.slug === analysis.slug);
         const notes = studyNotes.find(item => item.slug === analysis.slug);
+        const figureData = paperFigures.find(item => item.slug === analysis.slug);
         if(!analysis || !notes) throw new Error('No reading data available');
-        renderReading(analysis, essential, notes);
+        renderReading(analysis, essential, notes, figureData);
     })
     .catch(error => {
         readingDeck.innerHTML = `

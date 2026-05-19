@@ -1028,6 +1028,77 @@ body.dark .llm-badge {
     text-transform: uppercase;
 }
 
+.paper-figure-list {
+    display: grid;
+    gap: 18px;
+}
+
+.paper-figure-card {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.15fr) minmax(240px, 0.85fr);
+    gap: 18px;
+    align-items: start;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+}
+
+.paper-figure-card:first-child {
+    padding-top: 0;
+    border-top: none;
+}
+
+.paper-figure-card figure {
+    margin: 0;
+}
+
+.paper-figure-card img {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+}
+
+.paper-figure-card figcaption {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+.paper-figure-card figcaption strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+.paper-figure-notes {
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+}
+
+.paper-figure-notes h3 {
+    color: var(--text-primary);
+    font-size: 17px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+
+.paper-figure-notes ul {
+    color: var(--text-secondary);
+    padding-left: 18px;
+}
+
+.paper-figure-notes li + li {
+    margin-top: 10px;
+}
+
 .reading-graph {
     display: grid;
     gap: 18px;
@@ -1244,6 +1315,14 @@ body.dark .llm-badge {
     .reading-actions .paper-link {
         justify-content: center;
         white-space: normal;
+    }
+
+    .paper-figure-card {
+        grid-template-columns: 1fr;
+    }
+
+    .paper-figure-card img {
+        max-height: none;
     }
 
     .reading-graph-concepts,
