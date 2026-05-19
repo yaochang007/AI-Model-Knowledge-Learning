@@ -16,6 +16,7 @@
             'authors': 'Authors'
         };
         let essentialPapers = [];
+        const DATA_VERSION = '20260520-4';
         // Normalize helpers for boolean-like fields
         const normalizeBool = (val) => {
             const s = (val ?? '').toString().trim().toLowerCase();
@@ -57,7 +58,7 @@
             const loader = document.getElementById('loader');
             loader.classList.add('active');
             try {
-                const response = await fetch('data/papers.csv');
+                const response = await fetch(`data/papers.csv?v=${DATA_VERSION}`);
                 if(!response.ok) throw new Error('Failed to load data/papers.csv');
                 return parseCSV(await response.text());
             } finally {
@@ -65,7 +66,7 @@
             }
         }
         async function fetchEssentialPapers() {
-            const response = await fetch('data/essential-papers.json');
+            const response = await fetch(`data/essential-papers.json?v=${DATA_VERSION}`);
             if(!response.ok) throw new Error('Failed to load data/essential-papers.json');
             return response.json();
         }
@@ -529,36 +530,36 @@
                 if(key && !byTitle.has(key)) byTitle.set(key, paper);
             });
 
-            const featured = essentialPapers
-                .map(item => {
-                    const paper = byTitle.get(normalizeTitle(item.title));
-                    return paper ? { ...paper, essential: item } : null;
-                })
-                .filter(Boolean);
+            const featured = essentialPapers.map(item => ({
+                paper: byTitle.get(normalizeTitle(item.title)),
+                essential: item
+            }));
 
             if(featured.length === 0) {
                 grid.innerHTML = '<div class="empty-state"><p>Featured papers will appear after the paper data loads.</p></div>';
                 return;
             }
 
-            grid.innerHTML = featured.map((paper, index) => {
-                const link = paper.essential.sourceUrl || paper[F('link')] || '';
-                const year = escapeHtml(paper[F('year')] || 'N/A');
-                const publisher = escapeHtml(paper[F('publisher')] || 'N/A');
-                const title = escapeHtml(paper[F('title')] || 'Untitled');
-                const authors = escapeHtml(paper[F('authors')] || 'Unknown');
-                const rawCategory = paper[F('category')] || '';
+            grid.innerHTML = featured.map(({ paper, essential }, index) => {
+                const rawTitle = paper?.[F('title')] || essential.title || 'Untitled';
+                const link = essential.sourceUrl || paper?.[F('link')] || '';
+                const year = paper?.[F('year')] || '';
+                const publisher = paper?.[F('publisher')] || '';
+                const meta = escapeHtml([publisher, year].filter(Boolean).join(' ') || 'Essential Paper');
+                const title = escapeHtml(rawTitle);
+                const authors = escapeHtml(paper?.[F('authors')] || 'Vue Tech SG study notes');
+                const rawCategory = paper?.[F('category')] || '';
                 const category = escapeHtml(rawCategory);
-                const tags = (paper.essential.tags || []).filter(tag => normalizeTitle(tag) !== normalizeTitle(rawCategory));
-                const pdfPath = paper.essential.pdfPath || '';
-                const analysisPath = `analysis.html?paper=${encodeURIComponent(paper.essential.slug)}`;
-                const readingPath = `reading.html?paper=${encodeURIComponent(paper.essential.slug)}`;
+                const tags = (essential.tags || []).filter(tag => normalizeTitle(tag) !== normalizeTitle(rawCategory));
+                const pdfPath = essential.pdfPath || '';
+                const analysisPath = `analysis.html?paper=${encodeURIComponent(essential.slug)}`;
+                const readingPath = `reading.html?paper=${encodeURIComponent(essential.slug)}`;
 
                 return `
                     <article class="featured-card">
                         <div class="featured-meta">
                             <span class="featured-rank">${String(index + 1).padStart(2, '0')}</span>
-                            <span>${publisher} ${year}</span>
+                            <span>${meta}</span>
                         </div>
                         <h3>${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${title}</a>` : title}</h3>
                         <p>${authors}</p>
