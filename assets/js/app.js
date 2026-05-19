@@ -547,10 +547,12 @@
                 const publisher = escapeHtml(paper[F('publisher')] || 'N/A');
                 const title = escapeHtml(paper[F('title')] || 'Untitled');
                 const authors = escapeHtml(paper[F('authors')] || 'Unknown');
-                const category = escapeHtml(paper[F('category')] || '');
-                const tags = paper.essential.tags || [];
+                const rawCategory = paper[F('category')] || '';
+                const category = escapeHtml(rawCategory);
+                const tags = (paper.essential.tags || []).filter(tag => normalizeTitle(tag) !== normalizeTitle(rawCategory));
                 const pdfPath = paper.essential.pdfPath || '';
                 const analysisPath = `analysis.html?paper=${encodeURIComponent(paper.essential.slug)}`;
+                const readingPath = `reading.html?paper=${encodeURIComponent(paper.essential.slug)}`;
 
                 return `
                     <article class="featured-card">
@@ -566,6 +568,7 @@
                         </div>
                         <div class="featured-actions">
                             <a href="${escapeHtml(analysisPath)}" class="featured-link featured-link-primary"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
+                            <a href="${escapeHtml(readingPath)}" class="featured-link"><i class="fa-solid fa-book-open-reader"></i> Intensive Reading</a>
                             ${pdfPath ? `<a href="${escapeHtml(pdfPath)}" download class="featured-link"><i class="fa-solid fa-file-arrow-down"></i> Download PDF</a>` : '<span class="featured-link unavailable"><i class="fa-solid fa-file-circle-xmark"></i> PDF unavailable</span>'}
                             ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="featured-link">Source <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
                         </div>

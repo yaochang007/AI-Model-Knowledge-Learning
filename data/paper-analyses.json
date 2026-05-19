@@ -32,6 +32,246 @@
     ]
   },
   {
+    "slug": "bert",
+    "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    "venue": "NAACL",
+    "year": "2019",
+    "subtitle": "A foundational encoder model that made bidirectional pretraining the default pattern for language understanding.",
+    "sections": [
+      {"heading": "Overview", "points": ["Pretrains a Transformer encoder on unlabeled text, then fine-tunes it for many NLP tasks.", "Uses masked language modeling so representations can use both left and right context."]},
+      {"heading": "Why It Matters", "points": ["BERT showed that one pretrained model could replace many task-specific NLP systems.", "It made fine-tuning a practical recipe for question answering, classification, and sentence-pair tasks."]},
+      {"heading": "Core Idea", "points": ["Hide some tokens, ask the model to recover them, and force it to learn context-rich representations.", "Use the same pretrained backbone with small task heads instead of designing a new model per task."]},
+      {"heading": "Method", "points": ["Combines masked language modeling with next sentence prediction during pretraining.", "Fine-tunes all model parameters on labeled downstream data."]},
+      {"heading": "Key Results", "points": ["Reached strong results on GLUE, MultiNLI, and SQuAD at release.", "Made bidirectional Transformer encoders central to NLP research and production."]},
+      {"heading": "Limitations", "points": ["BERT is mainly an understanding model, not a free-form generative assistant.", "Its pretraining objectives and sentence-pair setup were later refined by newer models."]},
+      {"heading": "Practical Takeaways", "points": ["Use BERT to understand encoder-only Transformers and fine-tuning.", "Compare BERT with GPT-style decoder-only models to see why architecture choice matters."]}
+    ]
+  },
+  {
+    "slug": "t5",
+    "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+    "venue": "JMLR",
+    "year": "2020",
+    "subtitle": "The T5 paper that reframed NLP tasks as text-to-text problems.",
+    "sections": [
+      {"heading": "Overview", "points": ["Studies transfer learning choices across model architectures, objectives, data, and fine-tuning.", "Converts every task into a text input and text output format."]},
+      {"heading": "Why It Matters", "points": ["The text-to-text framing simplified how models handle translation, summarization, QA, and classification.", "It influenced later instruction-tuned and task-unified LLM systems."]},
+      {"heading": "Core Idea", "points": ["A single model interface can cover many language tasks if each task is expressed as text generation.", "Scale and clean pretraining data matter, but objective design and task formatting matter too."]},
+      {"heading": "Method", "points": ["Runs a systematic comparison of transfer-learning methods using the C4 dataset.", "Uses an encoder-decoder Transformer and task prefixes to indicate desired behavior."]},
+      {"heading": "Key Results", "points": ["Achieved strong benchmark results across many NLP tasks.", "Provided practical lessons about denoising objectives, data scale, and model size."]},
+      {"heading": "Limitations", "points": ["The study predates modern chat-style post-training and tool use.", "Encoder-decoder models are not the dominant architecture for most current general assistants."]},
+      {"heading": "Practical Takeaways", "points": ["Text-to-text task design is still useful for training data and evaluation design.", "Read this before studying instruction tuning and multi-task fine-tuning."]}
+    ]
+  },
+  {
+    "slug": "gpt-3",
+    "title": "Language Models are Few-Shot Learners",
+    "venue": "NeurIPS",
+    "year": "2020",
+    "subtitle": "The GPT-3 paper that made prompting and in-context learning mainstream.",
+    "sections": [
+      {"heading": "Overview", "points": ["Trains a 175B parameter autoregressive language model and evaluates it through prompts.", "Shows that larger language models can perform tasks from instructions and a few examples."]},
+      {"heading": "Why It Matters", "points": ["It shifted attention from task-specific fine-tuning to prompt-based model use.", "Many modern LLM product patterns descend from GPT-3's in-context learning behavior."]},
+      {"heading": "Core Idea", "points": ["A sufficiently large next-token predictor can adapt to tasks from examples in the context window.", "The model weights do not change at test time; the prompt steers behavior."]},
+      {"heading": "Method", "points": ["Scales a decoder-only Transformer and tests zero-shot, one-shot, and few-shot settings.", "Evaluates many tasks through natural-language prompts."]},
+      {"heading": "Key Results", "points": ["Few-shot performance improved substantially with scale.", "The model showed broad capability but also clear weaknesses in reasoning, reliability, and bias."]},
+      {"heading": "Limitations", "points": ["GPT-3 was not instruction-aligned in the way later chat models are.", "Large scale alone does not solve truthfulness, safety, or controllability."]},
+      {"heading": "Practical Takeaways", "points": ["Learn prompting as an interface to model behavior, not magic.", "Pair GPT-3 with InstructGPT and RLHF to see why alignment became central."]}
+    ]
+  },
+  {
+    "slug": "scaling-laws",
+    "title": "Scaling Laws for Neural Language Models",
+    "venue": "arXiv",
+    "year": "2020",
+    "subtitle": "A quantitative look at how model size, data, and compute affect language model loss.",
+    "sections": [
+      {"heading": "Overview", "points": ["Studies how language model loss changes as parameters, data, and compute scale.", "Finds smooth power-law trends across many orders of magnitude."]},
+      {"heading": "Why It Matters", "points": ["It gave researchers a planning tool for estimating returns from bigger training runs.", "It helped turn LLM scaling into a more quantitative engineering discipline."]},
+      {"heading": "Core Idea", "points": ["Performance improves predictably when model size, dataset size, and compute increase.", "The bottleneck can move depending on whether a run is model-limited, data-limited, or compute-limited."]},
+      {"heading": "Method", "points": ["Trains many models at different scales and fits empirical relationships.", "Analyzes loss as the main metric for language modeling progress."]},
+      {"heading": "Key Results", "points": ["Loss followed power-law trends with scale.", "The paper argued that larger models were often undertrained relative to available compute assumptions at the time."]},
+      {"heading": "Limitations", "points": ["Loss is not the same as helpfulness, reasoning, or safety.", "Later work revised the compute-optimal balance between model size and tokens."]},
+      {"heading": "Practical Takeaways", "points": ["Use scaling laws to reason about tradeoffs, not as guarantees of product quality.", "Read Chinchilla next to see how the compute-optimal recipe changed."]}
+    ]
+  },
+  {
+    "slug": "chinchilla",
+    "title": "Training Compute-Optimal Large Language Models",
+    "venue": "arXiv",
+    "year": "2022",
+    "subtitle": "The Chinchilla scaling paper that argued many large models were too small on data.",
+    "sections": [
+      {"heading": "Overview", "points": ["Revisits scaling laws with many training runs and a compute-optimal lens.", "Finds that model size and training tokens should scale together more evenly."]},
+      {"heading": "Why It Matters", "points": ["It changed how labs allocate compute between parameter count and data tokens.", "The result made smaller but better-trained models more competitive."]},
+      {"heading": "Core Idea", "points": ["For a fixed compute budget, do not only grow the model; train on enough data too.", "Undertrained giant models leave performance on the table."]},
+      {"heading": "Method", "points": ["Trains hundreds of models across parameter and token budgets.", "Derives revised compute-optimal scaling recommendations."]},
+      {"heading": "Key Results", "points": ["Chinchilla, a 70B model trained on more tokens, outperformed larger undertrained models in many settings.", "The paper made token budget a first-class scaling variable."]},
+      {"heading": "Limitations", "points": ["The analysis centers on pretraining loss and selected downstream tasks.", "Data quality, contamination, and post-training are separate concerns."]},
+      {"heading": "Practical Takeaways", "points": ["When comparing models, ask about tokens and data quality, not only parameter count.", "For study, connect this paper to dataset curation and synthetic data work."]}
+    ]
+  },
+  {
+    "slug": "instructgpt",
+    "title": "Training language models to follow instructions with human feedback",
+    "venue": "arXiv",
+    "year": "2022",
+    "subtitle": "The InstructGPT paper that made RLHF central to useful LLM assistants.",
+    "sections": [
+      {"heading": "Overview", "points": ["Fine-tunes GPT-style models using demonstrations and human preference rankings.", "Introduces a practical RLHF pipeline for making models follow user intent better."]},
+      {"heading": "Why It Matters", "points": ["It showed that a smaller aligned model could be preferred over a much larger base model.", "Modern chat assistants are built around this pretraining plus post-training pattern."]},
+      {"heading": "Core Idea", "points": ["Pretraining gives broad capability; human feedback shapes behavior toward helpfulness and instruction following.", "A reward model trained from preferences can guide policy optimization."]},
+      {"heading": "Method", "points": ["Uses supervised fine-tuning on demonstrations, trains a reward model, then applies PPO.", "Evaluates outputs with human preference judgments."]},
+      {"heading": "Key Results", "points": ["InstructGPT outputs were preferred to GPT-3 outputs on many prompts.", "Truthfulness and toxicity improved while most benchmark ability remained usable."]},
+      {"heading": "Limitations", "points": ["RLHF can optimize for what raters prefer, not necessarily what is true.", "The pipeline depends heavily on prompt distribution, labeler guidelines, and reward-model quality."]},
+      {"heading": "Practical Takeaways", "points": ["Separate capability training from behavior alignment in your mental model.", "Study DPO after this to see a simpler preference-optimization alternative."]}
+    ]
+  },
+  {
+    "slug": "chain-of-thought",
+    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "venue": "NeurIPS",
+    "year": "2022",
+    "subtitle": "The prompting paper that showed intermediate reasoning can unlock hard tasks.",
+    "sections": [
+      {"heading": "Overview", "points": ["Uses examples that include intermediate reasoning steps before final answers.", "Shows strong gains on arithmetic, commonsense, and symbolic reasoning tasks for large models."]},
+      {"heading": "Why It Matters", "points": ["It made reasoning traces a core interface for using and evaluating LLMs.", "It helped explain why prompt format can dramatically change model performance."]},
+      {"heading": "Core Idea", "points": ["Instead of asking for only an answer, show the model how to decompose the problem.", "The generated reasoning path can help the model allocate tokens to intermediate structure."]},
+      {"heading": "Method", "points": ["Compares standard few-shot prompting with chain-of-thought exemplars.", "Tests across several reasoning benchmarks and model sizes."]},
+      {"heading": "Key Results", "points": ["Large models benefited strongly from chain-of-thought examples.", "Small models did not show the same gains, suggesting an interaction with scale."]},
+      {"heading": "Limitations", "points": ["A fluent reasoning trace is not guaranteed to be faithful to the model's actual computation.", "Reasoning prompts can still produce confident wrong answers."]},
+      {"heading": "Practical Takeaways", "points": ["Use structured reasoning prompts for learning and problem solving, then verify final answers.", "For education tools, ask students to critique reasoning, not merely accept it."]}
+    ]
+  },
+  {
+    "slug": "rag",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "venue": "NeurIPS",
+    "year": "2020",
+    "subtitle": "The classic paper for combining neural generation with external retrieved knowledge.",
+    "sections": [
+      {"heading": "Overview", "points": ["Combines a sequence-to-sequence generator with a dense retriever over external documents.", "Targets tasks where parametric memory alone is not enough."]},
+      {"heading": "Why It Matters", "points": ["RAG became a standard pattern for grounding LLMs in documents and private knowledge bases.", "It helps with freshness, attribution, and domain-specific answers."]},
+      {"heading": "Core Idea", "points": ["Retrieve relevant passages first, then generate an answer conditioned on those passages.", "Split knowledge between model parameters and an updatable external index."]},
+      {"heading": "Method", "points": ["Uses a neural retriever and a pretrained generator in two RAG variants.", "Evaluates on knowledge-intensive question answering and generation tasks."]},
+      {"heading": "Key Results", "points": ["Improved performance on several open-domain QA tasks.", "Generated answers were more specific and factual than parametric-only baselines."]},
+      {"heading": "Limitations", "points": ["Bad retrieval can still lead to bad generation.", "RAG requires careful chunking, indexing, ranking, and citation design in production."]},
+      {"heading": "Practical Takeaways", "points": ["When accuracy matters, give the model source material instead of relying only on memory.", "Study this before building research assistants or document tutors."]}
+    ]
+  },
+  {
+    "slug": "lora",
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "venue": "ICLR",
+    "year": "2022",
+    "subtitle": "A parameter-efficient fine-tuning method that made adapting large models cheaper.",
+    "sections": [
+      {"heading": "Overview", "points": ["Freezes the base model and trains small low-rank matrices inserted into selected layers.", "Reduces the number of trainable parameters for adapting large Transformers."]},
+      {"heading": "Why It Matters", "points": ["LoRA made experimentation and domain adaptation far more accessible.", "It is widely used in LLM, vision, and diffusion-model workflows."]},
+      {"heading": "Core Idea", "points": ["Many task updates can be represented by low-rank changes rather than full parameter updates.", "Keep the pretrained model stable and learn a compact update path."]},
+      {"heading": "Method", "points": ["Adds low-rank decomposition matrices to attention projections and trains only those matrices.", "Compares quality, memory use, and trainable parameter counts."]},
+      {"heading": "Key Results", "points": ["Matched or approached full fine-tuning quality while using far fewer trainable parameters.", "Allowed multiple task adapters to share one frozen base model."]},
+      {"heading": "Limitations", "points": ["Adapter quality depends on placement, rank, data, and target task.", "LoRA does not solve data quality, safety, or evaluation problems by itself."]},
+      {"heading": "Practical Takeaways", "points": ["Use LoRA when you need affordable customization.", "For learners, focus on why low-rank updates can be expressive enough."]}
+    ]
+  },
+  {
+    "slug": "llama",
+    "title": "LLaMA: Open and Efficient Foundation Language Models",
+    "venue": "arXiv",
+    "year": "2023",
+    "subtitle": "A foundation model release that accelerated open LLM research.",
+    "sections": [
+      {"heading": "Overview", "points": ["Introduces a family of efficient foundation language models trained on public data.", "Shows that smaller models can be strong when trained carefully on enough tokens."]},
+      {"heading": "Why It Matters", "points": ["LLaMA helped catalyze the open-weight LLM ecosystem.", "Many later instruction-tuned, fine-tuned, and research models build on the LLaMA lineage."]},
+      {"heading": "Core Idea", "points": ["Train compute-efficient decoder-only Transformers at several sizes.", "Prioritize strong training data and token budget over parameter count alone."]},
+      {"heading": "Method", "points": ["Uses a modern Transformer recipe with public pretraining corpora.", "Evaluates models across common language and reasoning benchmarks."]},
+      {"heading": "Key Results", "points": ["Smaller LLaMA models were competitive with much larger earlier models.", "The release enabled broad experimentation with open model adaptation."]},
+      {"heading": "Limitations", "points": ["Base models are not automatically instruction-following or safe assistants.", "Training data details, licensing, and deployment responsibilities matter."]},
+      {"heading": "Practical Takeaways", "points": ["Use LLaMA to understand the open foundation model wave.", "Distinguish base models from chat/instruction-tuned derivatives."]}
+    ]
+  },
+  {
+    "slug": "dpo",
+    "title": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+    "venue": "NeurIPS",
+    "year": "2023",
+    "subtitle": "A simpler preference-tuning method that avoids an explicit RL loop.",
+    "sections": [
+      {"heading": "Overview", "points": ["Optimizes language models directly from preference pairs.", "Reframes reward modeling and policy optimization into a supervised-style objective."]},
+      {"heading": "Why It Matters", "points": ["DPO made preference tuning easier to implement and stabilize than many RLHF pipelines.", "It became a common post-training baseline for open LLMs."]},
+      {"heading": "Core Idea", "points": ["The language model itself can encode the preference objective relative to a reference model.", "Train the model to increase probability of preferred responses over rejected ones."]},
+      {"heading": "Method", "points": ["Derives a closed-form objective from reward modeling assumptions.", "Uses preference datasets without sampling rollouts during training."]},
+      {"heading": "Key Results", "points": ["Matched or improved over RLHF-style methods in several preference-learning settings.", "Reduced implementation complexity and hyperparameter burden."]},
+      {"heading": "Limitations", "points": ["Quality depends on preference-data quality and coverage.", "Preference optimization can still overfit style or reward shallow helpfulness signals."]},
+      {"heading": "Practical Takeaways", "points": ["Read this after InstructGPT to see how alignment training evolved.", "For product tuning, collect high-quality preference comparisons before chasing algorithms."]}
+    ]
+  },
+  {
+    "slug": "react",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "venue": "ICLR",
+    "year": "2023",
+    "subtitle": "A core agent paper that interleaves model reasoning with external actions.",
+    "sections": [
+      {"heading": "Overview", "points": ["Prompts language models to alternate between reasoning traces and actions.", "Uses observations from tools or environments to update the next step."]},
+      {"heading": "Why It Matters", "points": ["ReAct is a simple foundation for many agent loops.", "It connects chain-of-thought reasoning with tool use and environment interaction."]},
+      {"heading": "Core Idea", "points": ["Reasoning helps plan and track progress; actions gather information the model does not already have.", "The model can iterate: think, act, observe, then think again."]},
+      {"heading": "Method", "points": ["Defines prompt formats that include thought, action, and observation steps.", "Tests the approach on question answering and decision-making tasks."]},
+      {"heading": "Key Results", "points": ["Improved interpretability and task performance over reasoning-only or acting-only baselines in several tasks.", "Made failure modes more visible because intermediate steps are exposed."]},
+      {"heading": "Limitations", "points": ["Agents can loop, call weak tools, or act on mistaken reasoning.", "The prompt format does not guarantee safe or correct behavior."]},
+      {"heading": "Practical Takeaways", "points": ["Use ReAct as the mental template for tool-using assistants.", "Always log observations and actions when evaluating agent behavior."]}
+    ]
+  },
+  {
+    "slug": "toolformer",
+    "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+    "venue": "NeurIPS",
+    "year": "2023",
+    "subtitle": "A tool-use paper showing models can learn API-call behavior from self-supervised data.",
+    "sections": [
+      {"heading": "Overview", "points": ["Trains a language model to decide when and how to call external tools.", "Uses self-supervised annotation of API calls rather than only hand-labeled examples."]},
+      {"heading": "Why It Matters", "points": ["Tool use lets models access calculators, search, translation, and other capabilities beyond pure text prediction.", "The paper influenced later work on agentic and tool-augmented LLMs."]},
+      {"heading": "Core Idea", "points": ["A model can propose tool calls, keep the helpful ones, and learn from the resulting augmented text.", "The tool result becomes part of the context for better prediction."]},
+      {"heading": "Method", "points": ["Samples candidate API calls and filters them by whether they improve language-model likelihood.", "Fine-tunes the model on retained examples containing tool calls."]},
+      {"heading": "Key Results", "points": ["Improved performance on tasks requiring external tools while keeping general language ability.", "Showed that tool-use behavior can be learned with limited human annotation."]},
+      {"heading": "Limitations", "points": ["The method depends on available APIs and filtering quality.", "Real-world tools introduce latency, security, permissions, and reliability concerns."]},
+      {"heading": "Practical Takeaways", "points": ["Teach students to distinguish model knowledge from tool-verified knowledge.", "For products, design tool schemas and failure handling as carefully as prompts."]}
+    ]
+  },
+  {
+    "slug": "flashattention",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+    "venue": "NeurIPS",
+    "year": "2022",
+    "subtitle": "A systems paper that made exact attention much faster by respecting GPU memory movement.",
+    "sections": [
+      {"heading": "Overview", "points": ["Computes exact attention with an IO-aware algorithm that reduces memory reads and writes.", "Uses tiling to keep more work in fast GPU memory."]},
+      {"heading": "Why It Matters", "points": ["Attention speed and memory are major bottlenecks for training and serving Transformers.", "FlashAttention became a standard building block in efficient LLM systems."]},
+      {"heading": "Core Idea", "points": ["The bottleneck is often moving data, not only doing arithmetic.", "Reorder attention computation to avoid materializing the full attention matrix in slow memory."]},
+      {"heading": "Method", "points": ["Uses blockwise computation and online softmax normalization.", "Maintains exact attention results while improving practical performance."]},
+      {"heading": "Key Results", "points": ["Improved training speed and memory use for Transformer models.", "Enabled longer sequences and larger batches in many settings."]},
+      {"heading": "Limitations", "points": ["It is a kernel and systems optimization, not a new modeling objective.", "Benefits depend on hardware, implementation, sequence length, and model shape."]},
+      {"heading": "Practical Takeaways", "points": ["Study FlashAttention to understand why LLM performance is a systems problem.", "When building long-context apps, pay attention to kernels, not only model architecture."]}
+    ]
+  },
+  {
+    "slug": "mamba",
+    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "venue": "arXiv",
+    "year": "2023",
+    "subtitle": "A selective state-space architecture explored as an efficient alternative to attention-heavy sequence models.",
+    "sections": [
+      {"heading": "Overview", "points": ["Introduces a selective state-space model for sequence modeling.", "Targets long sequences with linear-time scaling and high throughput."]},
+      {"heading": "Why It Matters", "points": ["It renewed interest in non-Transformer architectures for language and other sequence data.", "Efficient long-context modeling is important for documents, code, audio, and multimodal systems."]},
+      {"heading": "Core Idea", "points": ["Use input-dependent state transitions so the model can selectively remember or ignore information.", "Avoid full pairwise attention while keeping strong sequence modeling ability."]},
+      {"heading": "Method", "points": ["Combines selective state spaces with hardware-aware parallel scan implementations.", "Evaluates across language, audio, and genomics-style sequence tasks."]},
+      {"heading": "Key Results", "points": ["Reported strong performance and throughput on several sequence modeling benchmarks.", "Showed that state-space backbones can compete with Transformers in important settings."]},
+      {"heading": "Limitations", "points": ["Transformers remain dominant for many LLM ecosystems and tooling stacks.", "State-space models have different interpretability and adaptation tradeoffs."]},
+      {"heading": "Practical Takeaways", "points": ["Use Mamba to understand why attention may not be the only path forward.", "Compare it with Kimi Linear and FlashAttention when studying long-context efficiency."]}
+    ]
+  },
+  {
     "slug": "llm-education-survey",
     "title": "Large Language Models for Education: A Survey",
     "venue": "Journal of Machine Learning and Cybernetics",

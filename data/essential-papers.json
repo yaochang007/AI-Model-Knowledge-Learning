@@ -14,6 +14,111 @@
     "sourceUrl": "https://arxiv.org/abs/2510.26692"
   },
   {
+    "slug": "bert",
+    "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+    "tags": ["Transformer", "Pretraining", "Language Representation"],
+    "pdfPath": "papers/essential/bert.pdf",
+    "sourceUrl": "https://arxiv.org/abs/1810.04805"
+  },
+  {
+    "slug": "t5",
+    "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+    "tags": ["Transformer", "Transfer Learning", "Text-to-Text"],
+    "pdfPath": "papers/essential/t5.pdf",
+    "sourceUrl": "https://arxiv.org/abs/1910.10683"
+  },
+  {
+    "slug": "gpt-3",
+    "title": "Language Models are Few-Shot Learners",
+    "tags": ["Few-Shot Learning", "Scaling", "LLM Foundations"],
+    "pdfPath": "papers/essential/gpt-3.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2005.14165"
+  },
+  {
+    "slug": "scaling-laws",
+    "title": "Scaling Laws for Neural Language Models",
+    "tags": ["Scaling", "Pretraining", "LLM Foundations"],
+    "pdfPath": "papers/essential/scaling-laws.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2001.08361"
+  },
+  {
+    "slug": "chinchilla",
+    "title": "Training Compute-Optimal Large Language Models",
+    "tags": ["Scaling", "Compute", "Data"],
+    "pdfPath": "papers/essential/chinchilla.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2203.15556"
+  },
+  {
+    "slug": "instructgpt",
+    "title": "Training language models to follow instructions with human feedback",
+    "tags": ["Alignment", "RLHF", "Instruction Tuning"],
+    "pdfPath": "papers/essential/instructgpt.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2203.02155"
+  },
+  {
+    "slug": "chain-of-thought",
+    "title": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models",
+    "tags": ["Reasoning", "Prompting", "LLM Foundations"],
+    "pdfPath": "papers/essential/chain-of-thought.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2201.11903"
+  },
+  {
+    "slug": "rag",
+    "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+    "tags": ["RAG", "Retrieval", "Grounding"],
+    "pdfPath": "papers/essential/rag.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2005.11401"
+  },
+  {
+    "slug": "lora",
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "tags": ["Fine-Tuning", "Parameter Efficiency", "Adapters"],
+    "pdfPath": "papers/essential/lora.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2106.09685"
+  },
+  {
+    "slug": "llama",
+    "title": "LLaMA: Open and Efficient Foundation Language Models",
+    "tags": ["Open Models", "Pretraining", "LLM Foundations"],
+    "pdfPath": "papers/essential/llama.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2302.13971"
+  },
+  {
+    "slug": "dpo",
+    "title": "Direct Preference Optimization: Your Language Model is Secretly a Reward Model",
+    "tags": ["Alignment", "Preference Optimization", "Fine-Tuning"],
+    "pdfPath": "papers/essential/dpo.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2305.18290"
+  },
+  {
+    "slug": "react",
+    "title": "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "tags": ["Agents", "Reasoning", "Tool Use"],
+    "pdfPath": "papers/essential/react.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2210.03629"
+  },
+  {
+    "slug": "toolformer",
+    "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+    "tags": ["Tool Use", "Agents", "Self-Supervision"],
+    "pdfPath": "papers/essential/toolformer.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2302.04761"
+  },
+  {
+    "slug": "flashattention",
+    "title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+    "tags": ["Efficient Attention", "Systems", "Transformer"],
+    "pdfPath": "papers/essential/flashattention.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2205.14135"
+  },
+  {
+    "slug": "mamba",
+    "title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+    "tags": ["Sequence Modeling", "Efficient Architecture", "Long Context"],
+    "pdfPath": "papers/essential/mamba.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2312.00752"
+  },
+  {
     "slug": "llm-education-survey",
     "title": "Large Language Models for Education: A Survey",
     "tags": ["AI Education", "Survey", "LLM Foundations"],

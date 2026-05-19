@@ -85,9 +85,9 @@ main {
 }
 
 .brand-logo {
-    width: 168px;
-    max-width: 38vw;
-    height: auto;
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
     display: block;
     flex: 0 0 auto;
 }
@@ -939,6 +939,16 @@ body.dark .llm-badge {
     gap: 16px;
 }
 
+.reading-layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.reading-wide {
+    grid-column: 1 / -1;
+}
+
 .analysis-slide {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -1004,8 +1014,8 @@ body.dark .llm-badge {
     }
 
     .brand-logo {
-        width: 150px;
-        max-width: 70vw;
+        width: 68px;
+        height: 68px;
     }
 
     .stats-strip {
@@ -1058,6 +1068,10 @@ body.dark .llm-badge {
     }
 
     .analysis-slides {
+        grid-template-columns: 1fr;
+    }
+
+    .reading-layout {
         grid-template-columns: 1fr;
     }
 
