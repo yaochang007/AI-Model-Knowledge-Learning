@@ -1,0 +1,194 @@
+[
+  {
+    "slug": "attention-is-all-you-need",
+    "title": "Attention Is All You Need",
+    "venue": "NeurIPS",
+    "year": "2017",
+    "subtitle": "The paper that replaced recurrence with attention and became the base pattern for modern LLMs.",
+    "sections": [
+      {"heading": "Overview", "points": ["Introduces the Transformer, a sequence model built from self-attention and feed-forward layers.", "Removes recurrence and convolution from the main architecture, making training far more parallelizable."]},
+      {"heading": "Why It Matters", "points": ["It became the foundation for BERT, GPT, T5, modern multimodal models, and most LLM tooling.", "The design made scaling language models simpler because context mixing could happen through attention over tokens."]},
+      {"heading": "Core Idea", "points": ["Every token builds a representation by attending to other tokens in the sequence.", "Multi-head attention lets the model learn several relationship patterns at the same time."]},
+      {"heading": "Method", "points": ["Encoder and decoder stacks combine self-attention, cross-attention, residual connections, layer normalization, and position encodings.", "Scaled dot-product attention computes relevance with query, key, and value projections."]},
+      {"heading": "Key Results", "points": ["Achieved strong machine translation quality while training faster than recurrent baselines.", "Showed that attention-only architectures could handle long-range dependencies effectively."]},
+      {"heading": "Limitations", "points": ["Full attention grows quadratically with sequence length.", "The original paper focuses on translation, not the broad instruction-following behavior associated with later LLMs."]},
+      {"heading": "Practical Takeaways", "points": ["Learn query-key-value attention first; it unlocks most modern LLM architecture papers.", "Use this paper as the baseline when evaluating newer efficient attention work."]}
+    ]
+  },
+  {
+    "slug": "kimi-linear",
+    "title": "Kimi Linear: An Expressive, Efficient Attention Architecture",
+    "venue": "arXiv",
+    "year": "2025",
+    "subtitle": "A recent attempt to keep long-context performance while reducing the cost of full attention.",
+    "sections": [
+      {"heading": "Overview", "points": ["Presents Kimi Linear, a hybrid architecture built around Kimi Delta Attention.", "Targets strong performance across short context, long context, and reinforcement learning scaling settings."]},
+      {"heading": "Why It Matters", "points": ["Long-context LLMs are expensive because standard attention needs large KV caches.", "If linear attention can compete with full attention, serving and studying long documents become much cheaper."]},
+      {"heading": "Core Idea", "points": ["Use a more expressive linear attention module with gated memory instead of storing every token interaction explicitly.", "Combine efficient linear layers with selected full-attention components where they still help."]},
+      {"heading": "Method", "points": ["Extends Gated DeltaNet with finer-grained gating for finite-state memory.", "Uses a hardware-aware chunkwise algorithm based on diagonal-plus-low-rank transitions."]},
+      {"heading": "Key Results", "points": ["Reports better results than full MLA under matched training settings.", "Reports up to 75% KV cache reduction and up to 6x decoding throughput at 1M context."]},
+      {"heading": "Limitations", "points": ["The claims need independent replication across more model sizes, languages, and deployment stacks.", "Hybrid attention still adds architectural complexity compared with vanilla Transformers."]},
+      {"heading": "Practical Takeaways", "points": ["Watch efficient attention work when building retrieval-heavy, agentic, or document-learning systems.", "For production, compare quality and latency together; speed alone is not enough."]}
+    ]
+  },
+  {
+    "slug": "llm-education-survey",
+    "title": "Large Language Models for Education: A Survey",
+    "venue": "Journal of Machine Learning and Cybernetics",
+    "year": "2024",
+    "subtitle": "A broad map of where LLMs fit into education research and learning products.",
+    "sections": [
+      {"heading": "Overview", "points": ["Surveys LLM applications across teaching, learning support, assessment, content generation, and administration.", "Organizes the research landscape for readers entering AI education."]},
+      {"heading": "Why It Matters", "points": ["Education use cases are diverse; a survey helps separate mature patterns from early experiments.", "It gives product teams a checklist of opportunities and risks before building."]},
+      {"heading": "Core Idea", "points": ["LLMs are best understood as flexible language interfaces that can support many educational workflows.", "Value depends on pedagogy, evaluation, safeguards, and learner context."]},
+      {"heading": "Method", "points": ["Synthesizes recent papers and groups them by educational function.", "Highlights technical and social challenges such as hallucination, bias, privacy, and assessment validity."]},
+      {"heading": "Key Results", "points": ["Finds rapid growth in LLM tutoring, feedback, question generation, and personalized learning work.", "Identifies evaluation quality and classroom integration as recurring gaps."]},
+      {"heading": "Limitations", "points": ["Survey conclusions can age quickly because LLM capabilities and products change fast.", "Many cited systems remain prototypes rather than validated classroom tools."]},
+      {"heading": "Practical Takeaways", "points": ["Use the paper as a topic map for deciding what to read next.", "For deployment, pair LLM features with measurable learning outcomes and teacher oversight."]}
+    ]
+  },
+  {
+    "slug": "llm-education-survey-outlook",
+    "title": "Large Language Models for Education: A Survey and Outlook",
+    "venue": "arXiv",
+    "year": "2024",
+    "subtitle": "A survey that looks at both current LLM education uses and future research directions.",
+    "sections": [
+      {"heading": "Overview", "points": ["Reviews how LLMs are used for learners, teachers, content, assessment, and institutions.", "Adds an outlook on open problems and future education scenarios."]},
+      {"heading": "Why It Matters", "points": ["It helps connect technical model progress with practical classroom needs.", "The outlook framing is useful for research planning and product roadmaps."]},
+      {"heading": "Core Idea", "points": ["LLMs can become learning companions, teaching assistants, and authoring tools, but only with careful alignment to educational goals.", "Human educators remain central for trust, motivation, and accountability."]},
+      {"heading": "Method", "points": ["Categorizes papers and systems by stakeholder and task.", "Discusses challenges around data, fairness, personalization, and responsible deployment."]},
+      {"heading": "Key Results", "points": ["Shows strong interest in personalized feedback, dialogue tutoring, and automated content generation.", "Highlights a shortage of rigorous long-term learning evaluations."]},
+      {"heading": "Limitations", "points": ["Broad coverage means individual systems are not analyzed in deep implementation detail.", "Fast-moving model releases may change the feasibility of some ideas."]},
+      {"heading": "Practical Takeaways", "points": ["Treat LLM education features as socio-technical systems, not isolated prompts.", "Prioritize privacy, teacher control, and evaluation from the first prototype."]}
+    ]
+  },
+  {
+    "slug": "adapting-llms-education",
+    "title": "Adapting Large Language Models for Education: Foundational Capabilities, Potentials, and Challenges",
+    "venue": "arXiv",
+    "year": "2024",
+    "subtitle": "A focused look at what must change when general LLMs are used for learning.",
+    "sections": [
+      {"heading": "Overview", "points": ["Examines the capabilities LLMs bring to education and the adaptation needed for learning contexts.", "Balances potential applications with operational and ethical challenges."]},
+      {"heading": "Why It Matters", "points": ["General chat quality does not guarantee good teaching.", "Education systems need domain alignment, age-appropriate behavior, and measurable learning support."]},
+      {"heading": "Core Idea", "points": ["Adaptation should align models with pedagogy, curriculum, learner state, and institutional constraints.", "The same base model may need different behavior for tutoring, grading, planning, or teacher support."]},
+      {"heading": "Method", "points": ["Discusses adaptation pathways such as prompting, fine-tuning, retrieval augmentation, and tool use.", "Frames challenges around reliability, fairness, privacy, and evaluation."]},
+      {"heading": "Key Results", "points": ["Identifies core education tasks where LLMs can help when constrained correctly.", "Argues that adaptation and evaluation are the main bottlenecks."]},
+      {"heading": "Limitations", "points": ["Many recommendations are conceptual rather than tested in large deployments.", "Domain-specific evidence still varies by subject, age group, and learning environment."]},
+      {"heading": "Practical Takeaways", "points": ["Start with narrow use cases and clear rubrics.", "Use retrieval and guardrails when factual accuracy and curriculum alignment matter."]}
+    ]
+  },
+  {
+    "slug": "llms-education-nlp-perspective",
+    "title": "Opportunities and Challenges of LLMs in Education: An NLP Perspective",
+    "venue": "arXiv",
+    "year": "2025",
+    "subtitle": "A language-technology view of LLM education systems and their risks.",
+    "sections": [
+      {"heading": "Overview", "points": ["Frames LLMs in education through NLP tasks such as generation, feedback, dialogue, assessment, and multilingual support.", "Connects model behavior to the needs of educational language processing."]},
+      {"heading": "Why It Matters", "points": ["Most education interactions are language-rich: questions, explanations, essays, feedback, and dialogue.", "NLP choices directly shape whether a learning system is useful or misleading."]},
+      {"heading": "Core Idea", "points": ["LLMs create new opportunities for adaptive language interaction, but they also amplify reliability and equity concerns.", "Evaluation must include linguistic quality, pedagogical value, and learner impact."]},
+      {"heading": "Method", "points": ["Synthesizes NLP-centered education use cases and known limitations.", "Discusses multilinguality, data quality, bias, hallucination, and assessment concerns."]},
+      {"heading": "Key Results", "points": ["Identifies high-potential areas such as feedback, tutoring dialogue, and language learning.", "Emphasizes that benchmark success is not the same as classroom success."]},
+      {"heading": "Limitations", "points": ["Perspective papers depend on the selected literature and framing.", "Implementation details for production systems are not the main focus."]},
+      {"heading": "Practical Takeaways", "points": ["Evaluate educational LLMs with real learner tasks, not only generic NLP benchmarks.", "Build multilingual and accessibility considerations early."]}
+    ]
+  },
+  {
+    "slug": "chatgpt-learning-meta-analysis",
+    "title": "The effect of ChatGPT on students' learning performance, learning perception, and higher-order thinking: insights from a meta-analysis",
+    "venue": "Nature Humanities and Social Sciences Communications",
+    "year": "2025",
+    "subtitle": "Evidence-focused synthesis of ChatGPT's observed learning effects.",
+    "sections": [
+      {"heading": "Overview", "points": ["Uses meta-analysis to summarize empirical studies about ChatGPT in learning.", "Looks at performance, learner perception, and higher-order thinking outcomes."]},
+      {"heading": "Why It Matters", "points": ["Education AI should be judged by learning evidence, not novelty alone.", "Meta-analysis helps estimate whether reported benefits are consistent across studies."]},
+      {"heading": "Core Idea", "points": ["ChatGPT can support learning, but its effect depends on instructional design and usage context.", "The key question is not whether students use AI, but how it is integrated into learning tasks."]},
+      {"heading": "Method", "points": ["Aggregates results across selected empirical studies.", "Compares outcome categories and study characteristics to identify patterns."]},
+      {"heading": "Key Results", "points": ["Reports insights on where ChatGPT appears to improve learning-related outcomes.", "Highlights the need to distinguish performance gains from perception and deeper reasoning gains."]},
+      {"heading": "Limitations", "points": ["Meta-analysis quality depends on included study quality and publication bias.", "Rapid model changes can make older ChatGPT studies less representative."]},
+      {"heading": "Practical Takeaways", "points": ["Use ChatGPT with structured learning activities, reflection, and feedback loops.", "Track outcomes beyond satisfaction, including transfer and reasoning quality."]}
+    ]
+  },
+  {
+    "slug": "gen-mentor",
+    "title": "LLM-powered Multi-agent Framework for Goal-oriented Learning in Intelligent Tutoring System",
+    "venue": "WWW",
+    "year": "2025",
+    "subtitle": "A multi-agent tutoring framework built around learner goals and adaptive support.",
+    "sections": [
+      {"heading": "Overview", "points": ["Builds an intelligent tutoring system using multiple LLM-powered agents.", "Focuses on goal-oriented learning rather than generic chat."]},
+      {"heading": "Why It Matters", "points": ["Learning support often requires planning, diagnosis, feedback, and motivation at the same time.", "Multi-agent designs can separate responsibilities and make tutoring behavior easier to control."]},
+      {"heading": "Core Idea", "points": ["Coordinate specialized agents to understand goals, recommend steps, and support learning progress.", "Use LLM flexibility while grounding the system in tutoring workflows."]},
+      {"heading": "Method", "points": ["Combines agents for learning goal handling, dialogue, recommendation, and feedback.", "Evaluates the framework in goal-oriented tutoring scenarios."]},
+      {"heading": "Key Results", "points": ["Shows promise for structured tutoring interactions and personalized learning support.", "Demonstrates how agent decomposition can organize complex educational behavior."]},
+      {"heading": "Limitations", "points": ["Multi-agent systems can be harder to debug, evaluate, and keep consistent.", "Real classroom deployment needs privacy, teacher visibility, and reliability checks."]},
+      {"heading": "Practical Takeaways", "points": ["Use explicit learner goals as the control center for tutoring products.", "Keep agent roles narrow and observable so educators can understand the system."]}
+    ]
+  },
+  {
+    "slug": "autotutor-meets-llms",
+    "title": "AutoTutor meets Large Language Models: A Language Model Tutor with Rich Pedagogy and Guardrails",
+    "venue": "Learning@Scale",
+    "year": "2024",
+    "subtitle": "A bridge between classic tutoring research and modern LLM dialogue systems.",
+    "sections": [
+      {"heading": "Overview", "points": ["Connects AutoTutor-style pedagogical strategies with LLM-driven tutoring.", "Emphasizes guardrails so open-ended model dialogue stays instructionally useful."]},
+      {"heading": "Why It Matters", "points": ["Classic tutoring systems encode decades of pedagogy but can be rigid.", "LLMs are flexible but need structure to avoid shallow answers or unsafe guidance."]},
+      {"heading": "Core Idea", "points": ["Combine rich tutoring moves with LLM language generation.", "Use guardrails to keep dialogue aligned with pedagogy, topic, and learner needs."]},
+      {"heading": "Method", "points": ["Designs a language model tutor informed by AutoTutor principles.", "Applies constraints and evaluation around tutoring quality."]},
+      {"heading": "Key Results", "points": ["Shows that LLM tutors can deliver more pedagogically meaningful interactions when guided.", "Highlights practical techniques for balancing flexibility and control."]},
+      {"heading": "Limitations", "points": ["Guardrails need constant testing across subjects and learner behaviors.", "Pedagogical quality remains harder to measure than fluent language."]},
+      {"heading": "Practical Takeaways", "points": ["Do not build tutors as plain chatbots; encode tutoring moves and boundaries.", "Evaluate whether the system prompts thinking rather than just giving answers."]}
+    ]
+  },
+  {
+    "slug": "socraticlm",
+    "title": "SocraticLM: Exploring Socratic Personalized Teaching with Large Language Models",
+    "venue": "NeurIPS",
+    "year": "2024",
+    "subtitle": "An LLM teaching approach centered on Socratic questioning and personalization.",
+    "sections": [
+      {"heading": "Overview", "points": ["Explores how LLMs can teach through guided questions instead of direct answers.", "Targets personalized, thought-provoking interactions for learning."]},
+      {"heading": "Why It Matters", "points": ["Good tutors often help learners reason, not merely receive explanations.", "Socratic teaching can encourage reflection and deeper understanding when done well."]},
+      {"heading": "Core Idea", "points": ["Train or guide LLMs to ask helpful questions that reveal learner thinking.", "Personalize the teaching path based on student responses and needs."]},
+      {"heading": "Method", "points": ["Builds a Socratic teaching framework and evaluates teaching quality.", "Uses instruction-tuning and dialogue design to shape tutoring behavior."]},
+      {"heading": "Key Results", "points": ["Reports improved Socratic teaching behavior compared with general LLM responses.", "Shows a path for making model tutors more interactive and learner-centered."]},
+      {"heading": "Limitations", "points": ["Question quality is context-sensitive and can frustrate learners if poorly timed.", "Personalization requires reliable student modeling and safeguards."]},
+      {"heading": "Practical Takeaways", "points": ["Use Socratic prompts when the goal is reasoning, diagnosis, or conceptual understanding.", "Let learners request direct explanation when they are stuck."]}
+    ]
+  },
+  {
+    "slug": "planglow",
+    "title": "PlanGlow: Personalized Study Planning with an Explainable and Controllable LLM-Driven System",
+    "venue": "Learning@Scale",
+    "year": "2025",
+    "subtitle": "A study-planning system that makes LLM recommendations explainable and adjustable.",
+    "sections": [
+      {"heading": "Overview", "points": ["Presents an LLM-driven system for personalized study planning.", "Focuses on explainability and user control, not just plan generation."]},
+      {"heading": "Why It Matters", "points": ["Students need plans they can trust, adapt, and actually follow.", "Explainable planning is especially important when recommendations affect study time and priorities."]},
+      {"heading": "Core Idea", "points": ["Generate study plans from learner goals and context, then expose the reasoning and controls.", "Make the plan a collaborative artifact rather than a one-shot answer."]},
+      {"heading": "Method", "points": ["Combines LLM planning with interfaces for explanation and user adjustment.", "Evaluates how learners understand and control personalized recommendations."]},
+      {"heading": "Key Results", "points": ["Shows the value of transparency and controllability in AI study planning.", "Provides a useful pattern for learning-product interfaces."]},
+      {"heading": "Limitations", "points": ["Planning quality depends on accurate learner information and realistic constraints.", "Long-term adherence and learning gains need continued validation."]},
+      {"heading": "Practical Takeaways", "points": ["Expose why a plan was recommended and let users edit it.", "Treat study planning as an ongoing loop: goal, plan, action, reflection, update."]}
+    ]
+  },
+  {
+    "slug": "classroom-simulacra",
+    "title": "Classroom Simulacra: Building Contextual Student Generative Agents in Online Education for Learning Behavioral Simulation",
+    "venue": "CHI",
+    "year": "2025",
+    "subtitle": "Generative student agents for simulating learner behavior in online education contexts.",
+    "sections": [
+      {"heading": "Overview", "points": ["Builds contextual generative agents that simulate student behavior.", "Targets online education research and design scenarios where real learner testing is expensive."]},
+      {"heading": "Why It Matters", "points": ["Simulated learners can help prototype interventions, content, and classroom workflows earlier.", "They may give educators and designers a way to explore behavior patterns before deployment."]},
+      {"heading": "Core Idea", "points": ["Represent student agents with contextual profiles, goals, and behavior tendencies.", "Use generative models to produce plausible learning interactions."]},
+      {"heading": "Method", "points": ["Designs agent behavior around online learning contexts.", "Evaluates whether simulated behaviors are useful for understanding learner interactions."]},
+      {"heading": "Key Results", "points": ["Shows a path for using generative agents as design and research tools in education.", "Highlights contextual grounding as important for believable simulation."]},
+      {"heading": "Limitations", "points": ["Simulations can reflect model bias or designer assumptions.", "Synthetic behavior cannot replace real learner evidence for high-stakes decisions."]},
+      {"heading": "Practical Takeaways", "points": ["Use student agents for early exploration, not final validation.", "Document assumptions and compare simulations against observed learner data whenever possible."]}
+    ]
+  }
+]

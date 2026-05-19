@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Analysis | Vue Tech SG AI Research</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <main class="analysis-main">
+        <header class="header analysis-header">
+            <div class="header-top">
+                <a class="brand-lockup brand-link" href="./#essential-papers">
+                    <img class="brand-logo" src="assets/images/vue-tech-logo.png" alt="Vue Tech">
+                    <span class="title">Vue Tech SG AI Research</span>
+                </a>
+                <a class="section-link" href="./#essential-papers"><i class="fa-solid fa-arrow-left"></i> Back to Essential Papers</a>
+            </div>
+            <p class="description">Concise, PPT-style analysis for fast reading and practical follow-up.</p>
+        </header>
+
+        <section class="analysis-deck" id="analysisDeck" aria-live="polite">
+            <div class="loader active" role="status">
+                <div class="spinner"></div>
+                <div>Loading analysis...</div>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/analysis.js"></script>
+</body>
+</html>

@@ -1,4 +1,6 @@
 group,category,publisher,year,type,is_llm_related,title,link,authors,code
+Foundational AI,Transformer Architecture,NeurIPS,2017,conference,1,Attention Is All You Need,https://arxiv.org/abs/1706.03762,"Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin",
+Foundational AI,Efficient Attention,arXiv,2025,preprint,1,"Kimi Linear: An Expressive, Efficient Attention Architecture",https://arxiv.org/abs/2510.26692,"Kimi Team, Yu Zhang, Zongyu Lin, Xingcheng Yao, Jiaxi Hu, Fanqing Meng, Songlin Yang, Zhilin Yang, Yulun Du",
 "Survey, Analysis & Vision",Comprehensive Survey,BigData,2023,conference,1,Large Language Models in Education: Vision and Opportunities,https://arxiv.org/abs/2311.13160,"Wensheng Gan, Zhenlian Qi, Jiayang Wu, Jerry Chun-Wei Lin",
 "Survey, Analysis & Vision",Comprehensive Survey,EDM-RL4ED,2021,conference,0,Reinforcement Learning for Education: Opportunities and Challenges,https://arxiv.org/abs/2107.08828,"Adish Singla, Anna N. Rafferty, Goran Radanovic, Neil T. Heffernan",
 "Survey, Analysis & Vision",Comprehensive Survey,Journal of Machine Learning and Cybernetics,2024,journal,1,Large Language Models for Education: A Survey,https://arxiv.org/abs/2405.13001,"Hanyi Xu, Wensheng Gan, Zhenlian Qi, Jiayang Wu, Philip S. Yu",

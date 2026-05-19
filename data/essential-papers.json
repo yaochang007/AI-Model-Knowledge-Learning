@@ -1,0 +1,86 @@
+[
+  {
+    "slug": "attention-is-all-you-need",
+    "title": "Attention Is All You Need",
+    "tags": ["Transformer", "Self-Attention", "LLM Foundations"],
+    "pdfPath": "papers/essential/attention-is-all-you-need.pdf",
+    "sourceUrl": "https://arxiv.org/abs/1706.03762"
+  },
+  {
+    "slug": "kimi-linear",
+    "title": "Kimi Linear: An Expressive, Efficient Attention Architecture",
+    "tags": ["Efficient Attention", "Long Context", "LLM Foundations"],
+    "pdfPath": "papers/essential/kimi-linear.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2510.26692"
+  },
+  {
+    "slug": "llm-education-survey",
+    "title": "Large Language Models for Education: A Survey",
+    "tags": ["AI Education", "Survey", "LLM Foundations"],
+    "pdfPath": "papers/essential/llm-education-survey.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2405.13001"
+  },
+  {
+    "slug": "llm-education-survey-outlook",
+    "title": "Large Language Models for Education: A Survey and Outlook",
+    "tags": ["AI Education", "Survey", "Research Outlook"],
+    "pdfPath": "papers/essential/llm-education-survey-outlook.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2403.18105"
+  },
+  {
+    "slug": "adapting-llms-education",
+    "title": "Adapting Large Language Models for Education: Foundational Capabilities, Potentials, and Challenges",
+    "tags": ["AI Education", "Adaptation", "Evaluation"],
+    "pdfPath": "papers/essential/adapting-llms-education.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2401.08664"
+  },
+  {
+    "slug": "llms-education-nlp-perspective",
+    "title": "Opportunities and Challenges of LLMs in Education: An NLP Perspective",
+    "tags": ["AI Education", "NLP", "Responsible AI"],
+    "pdfPath": "papers/essential/llms-education-nlp-perspective.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2507.22753"
+  },
+  {
+    "slug": "chatgpt-learning-meta-analysis",
+    "title": "The effect of ChatGPT on students' learning performance, learning perception, and higher-order thinking: insights from a meta-analysis",
+    "tags": ["AI Education", "Meta-Analysis", "Learning Outcomes"],
+    "pdfPath": "papers/essential/chatgpt-learning-meta-analysis.pdf",
+    "sourceUrl": "https://www.nature.com/articles/s41599-025-04787-y"
+  },
+  {
+    "slug": "gen-mentor",
+    "title": "LLM-powered Multi-agent Framework for Goal-oriented Learning in Intelligent Tutoring System",
+    "tags": ["Tutoring", "Multi-Agent", "Study Planning"],
+    "pdfPath": "papers/essential/gen-mentor.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2501.15749"
+  },
+  {
+    "slug": "autotutor-meets-llms",
+    "title": "AutoTutor meets Large Language Models: A Language Model Tutor with Rich Pedagogy and Guardrails",
+    "tags": ["Tutoring", "Guardrails", "Pedagogy"],
+    "pdfPath": "papers/essential/autotutor-meets-llms.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2402.09216"
+  },
+  {
+    "slug": "socraticlm",
+    "title": "SocraticLM: Exploring Socratic Personalized Teaching with Large Language Models",
+    "tags": ["Tutoring", "Socratic Method", "Personalization"],
+    "pdfPath": "papers/essential/socraticlm.pdf",
+    "sourceUrl": "https://neurips.cc/virtual/2024/poster/93477"
+  },
+  {
+    "slug": "planglow",
+    "title": "PlanGlow: Personalized Study Planning with an Explainable and Controllable LLM-Driven System",
+    "tags": ["Study Planning", "Explainability", "Personalization"],
+    "pdfPath": "papers/essential/planglow.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2504.12452"
+  },
+  {
+    "slug": "classroom-simulacra",
+    "title": "Classroom Simulacra: Building Contextual Student Generative Agents in Online Education for Learning Behavioral Simulation",
+    "tags": ["AI Education", "Student Simulation", "Generative Agents"],
+    "pdfPath": "papers/essential/classroom-simulacra.pdf",
+    "sourceUrl": "https://arxiv.org/abs/2502.02780"
+  }
+]

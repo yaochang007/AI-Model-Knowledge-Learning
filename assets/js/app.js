@@ -15,18 +15,7 @@
             'title': 'Title',
             'authors': 'Authors'
         };
-        const essentialPaperTitles = [
-            'Large Language Models for Education: A Survey',
-            'Large Language Models for Education: A Survey and Outlook',
-            'Adapting Large Language Models for Education: Foundational Capabilities, Potentials, and Challenges',
-            'Opportunities and Challenges of LLMs in Education: An NLP Perspective',
-            'The effect of ChatGPT on students’ learning performance, learning perception, and higher-order thinking: insights from a meta-analysis',
-            'LLM-powered Multi-agent Framework for Goal-oriented Learning in Intelligent Tutoring System',
-            'AutoTutor meets Large Language Models: A Language Model Tutor with Rich Pedagogy and Guardrails',
-            'SocraticLM: Exploring Socratic Personalized Teaching with Large Language Models',
-            'PlanGlow: Personalized Study Planning with an Explainable and Controllable LLM-Driven System',
-            'Classroom Simulacra: Building Contextual Student Generative Agents in Online Education for Learning Behavioral Simulation'
-        ];
+        let essentialPapers = [];
         // Normalize helpers for boolean-like fields
         const normalizeBool = (val) => {
             const s = (val ?? '').toString().trim().toLowerCase();
@@ -41,6 +30,12 @@
             div.textContent = text;
             return div.innerHTML;
         };
+        const normalizeTitle = (text) => (text || '')
+            .toString()
+            .toLowerCase()
+            .replace(/[’‘]/g, "'")
+            .replace(/\s+/g, ' ')
+            .trim();
         // Night/Day mode toggle
         const toggleBtn = document.getElementById('toggleModeBtn');
         if (!toggleBtn) {
@@ -68,6 +63,11 @@
             } finally {
                 loader.classList.remove('active');
             }
+        }
+        async function fetchEssentialPapers() {
+            const response = await fetch('data/essential-papers.json');
+            if(!response.ok) throw new Error('Failed to load data/essential-papers.json');
+            return response.json();
         }
         function parseCSV(text) {
             const lines = [];
@@ -525,11 +525,15 @@
             const byTitle = new Map();
             allPapers.forEach(paper => {
                 const title = paper[F('title')];
-                if(title && !byTitle.has(title)) byTitle.set(title, paper);
+                const key = normalizeTitle(title);
+                if(key && !byTitle.has(key)) byTitle.set(key, paper);
             });
 
-            const featured = essentialPaperTitles
-                .map(title => byTitle.get(title))
+            const featured = essentialPapers
+                .map(item => {
+                    const paper = byTitle.get(normalizeTitle(item.title));
+                    return paper ? { ...paper, essential: item } : null;
+                })
                 .filter(Boolean);
 
             if(featured.length === 0) {
@@ -538,12 +542,15 @@
             }
 
             grid.innerHTML = featured.map((paper, index) => {
-                const link = paper[F('link')] || '';
+                const link = paper.essential.sourceUrl || paper[F('link')] || '';
                 const year = escapeHtml(paper[F('year')] || 'N/A');
                 const publisher = escapeHtml(paper[F('publisher')] || 'N/A');
                 const title = escapeHtml(paper[F('title')] || 'Untitled');
                 const authors = escapeHtml(paper[F('authors')] || 'Unknown');
                 const category = escapeHtml(paper[F('category')] || '');
+                const tags = paper.essential.tags || [];
+                const pdfPath = paper.essential.pdfPath || '';
+                const analysisPath = `analysis.html?paper=${encodeURIComponent(paper.essential.slug)}`;
 
                 return `
                     <article class="featured-card">
@@ -553,18 +560,24 @@
                         </div>
                         <h3>${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${title}</a>` : title}</h3>
                         <p>${authors}</p>
-                        <div class="featured-footer">
-                            ${category ? `<span class="tag">${category}</span>` : '<span></span>'}
-                            ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="featured-link">Open <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
+                        <div class="paper-tags">
+                            ${category ? `<span class="tag">${category}</span>` : ''}
+                            ${tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                        <div class="featured-actions">
+                            <a href="${escapeHtml(analysisPath)}" class="featured-link featured-link-primary"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
+                            ${pdfPath ? `<a href="${escapeHtml(pdfPath)}" download class="featured-link"><i class="fa-solid fa-file-arrow-down"></i> Download PDF</a>` : '<span class="featured-link unavailable"><i class="fa-solid fa-file-circle-xmark"></i> PDF unavailable</span>'}
+                            ${link ? `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer" class="featured-link">Source <i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : ''}
                         </div>
                     </article>
                 `;
             }).join('');
         }
         // Initialize
-        fetchCSV().then(papers => {
+        Promise.all([fetchCSV(), fetchEssentialPapers()]).then(([papers, essentials]) => {
             if(!papers || !papers.length) throw new Error('No data');
             allPapers = papers;
+            essentialPapers = essentials || [];
 
             // Build header map
             const headerSet = new Set();
