@@ -4,6 +4,8 @@ Vue Tech SG AI Research is a static research repository for learning important A
 
 Live site: [https://research.vue.sg/](https://research.vue.sg/)
 
+Author: Vue Tech Pte. Ltd. Singapore
+
 ## What This Project Provides
 
 - A searchable and filterable paper repository for AI, LLM, and education research.
@@ -44,6 +46,7 @@ If you reuse the paper list or taxonomy, please also credit the upstream project
 │   └── paper-index.json
 ├── papers/
 │   └── essential/
+├── LICENSE
 ├── LLM4EDU.md
 └── README.md
 ```
@@ -98,6 +101,10 @@ Typical content updates:
 ## Notes on PDFs and Figures
 
 PDFs and extracted figures are included only as learning references for selected Essential Papers. Copyright remains with the original authors and publishers. If a publisher does not allow redistribution, use the source link instead of hosting a local copy.
+
+## License
+
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE).
 
 ## Acknowledgements
 
