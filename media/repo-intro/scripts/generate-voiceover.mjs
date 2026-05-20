@@ -25,7 +25,7 @@ for (const [language, config] of Object.entries(data.languages)) {
     rmSync(aiff, {force: true});
     rmSync(m4a, {force: true});
 
-    execFileSync('say', ['-v', config.voice, '-r', String(config.rate), '-o', aiff, scene.text], {stdio: 'inherit'});
+    execFileSync('say', ['-v', config.localVoice ?? config.voice, '-r', String(config.rate), '-o', aiff, scene.text], {stdio: 'inherit'});
     execFileSync('afconvert', ['-f', 'm4af', '-d', 'aac', aiff, m4a], {stdio: 'inherit'});
     rmSync(aiff, {force: true});
 

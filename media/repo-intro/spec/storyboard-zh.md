@@ -5,7 +5,7 @@
 - 语言：中文
 - 目标时长：45-60 秒
 - 主要合成：`IntroZH169`、`IntroZH43`、`IntroZH916`
-- 声音：Tingting，清晰、专业、自然
+- 声音：Serena via Qwen3-TTS，清晰、专业、自然
 
 ## 场景 01
 - 目标：抓住 AI 论文更新太快的痛点。

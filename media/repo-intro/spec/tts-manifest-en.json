@@ -1,0 +1,63 @@
+{
+  "provider": "qwen3-tts",
+  "model": "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+  "language": "English",
+  "defaultVoice": "Aiden",
+  "roles": [
+    {
+      "name": "narrator",
+      "voice": "Aiden",
+      "persona": "Speak clearly and naturally. Sound calm, practical, and technically confident. Keep the pacing moderate."
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-hook",
+      "speaker": "narrator",
+      "text": "AI papers are moving fast. This repo helps you turn the noise into a learning path.",
+      "subtitle": "AI papers move fast. Turn the noise into a learning path.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/01-hook.wav"
+    },
+    {
+      "id": "02-repo",
+      "speaker": "narrator",
+      "text": "Vue Tech SG AI Research is a searchable repository for AI, LLM, and AI education papers.",
+      "subtitle": "A searchable hub for AI, LLM, and education research.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/02-repo.wav"
+    },
+    {
+      "id": "03-essential",
+      "speaker": "narrator",
+      "text": "Start with Essential Papers: Transformer, BERT, RAG, LoRA, Mamba, and key AI education studies.",
+      "subtitle": "Start with Transformer, BERT, RAG, LoRA, Mamba, and more.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/03-essential.wav"
+    },
+    {
+      "id": "04-analysis",
+      "speaker": "narrator",
+      "text": "Open Analysis for a PPT-style view: why it matters, method, results, limitations, and takeaways.",
+      "subtitle": "Analysis gives you the paper in a clear PPT-style structure.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/04-analysis.wav"
+    },
+    {
+      "id": "05-reading",
+      "speaker": "narrator",
+      "text": "Open Intensive Reading for study notes, figures, detailed comments, pitfalls, and practice tasks.",
+      "subtitle": "Intensive Reading helps learners study deeply, not just skim.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/05-reading.wav"
+    },
+    {
+      "id": "06-cta",
+      "speaker": "narrator",
+      "text": "Search, filter, download PDFs, and build your own paper-reading routine at research dot vue dot sg.",
+      "subtitle": "Search, filter, download, and build your own reading routine.",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/en/06-cta.wav"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "provider": "qwen3-tts",
+  "model": "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+  "language": "Chinese",
+  "defaultVoice": "Serena",
+  "roles": [
+    {
+      "name": "narrator",
+      "voice": "Serena",
+      "persona": "语气冷静、清晰、专业。像独立开发者在解释自己做过的项目。节奏自然，不夸张。"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "01-hook",
+      "speaker": "narrator",
+      "text": "AI 论文更新太快，真正困难的不是收藏，而是读懂、读透、用起来。",
+      "subtitle": "AI 论文更新太快，难点是读懂、读透、用起来。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/01-hook.wav"
+    },
+    {
+      "id": "02-repo",
+      "speaker": "narrator",
+      "text": "Vue Tech SG AI Research 把 AI、大模型和 AI 教育论文整理成一个可搜索的研究网站。",
+      "subtitle": "一个可搜索的 AI、大模型和 AI 教育研究网站。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/02-repo.wav"
+    },
+    {
+      "id": "03-essential",
+      "speaker": "narrator",
+      "text": "先看 Essential Papers：Transformer、BERT、RAG、LoRA、Mamba，还有重要的 AI 教育研究。",
+      "subtitle": "从 Transformer、BERT、RAG、LoRA、Mamba 开始。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/03-essential.wav"
+    },
+    {
+      "id": "04-analysis",
+      "speaker": "narrator",
+      "text": "点击 Analysis，可以用类似 PPT 的结构快速抓住背景、方法、结果、局限和启发。",
+      "subtitle": "Analysis 用 PPT 结构帮你快速理解论文。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/04-analysis.wav"
+    },
+    {
+      "id": "05-reading",
+      "speaker": "narrator",
+      "text": "点击 Intensive Reading，可以看到精读笔记、图解、详细批注、常见误区和练习任务。",
+      "subtitle": "Intensive Reading 帮助学习者真正读懂论文。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/05-reading.wav"
+    },
+    {
+      "id": "06-cta",
+      "speaker": "narrator",
+      "text": "你可以搜索、筛选、下载论文 PDF，并建立自己的 AI 论文学习路线。",
+      "subtitle": "搜索、筛选、下载 PDF，建立自己的学习路线。",
+      "durationTargetSeconds": 8.0,
+      "file": "public/voiceover/zh/06-cta.wav"
+    }
+  ]
+}

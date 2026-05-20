@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "setup:qwen": "python3.12 -m venv .venv-qwen && .venv-qwen/bin/python -m pip install -U pip qwen-tts soundfile",
     "typecheck": "tsc --noEmit",
     "compositions": "remotion compositions src/index.tsx --config=remotion.config.ts",
-    "voiceover": "node scripts/generate-voiceover.mjs",
+    "voiceover": ".venv-qwen/bin/python scripts/generate-qwen-voiceover.py",
+    "voiceover:qwen": ".venv-qwen/bin/python scripts/generate-qwen-voiceover.py",
+    "voiceover:local": "node scripts/generate-voiceover.mjs",
     "render": "node scripts/render-all.mjs",
     "render:covers": "node scripts/render-all.mjs --covers-only",
     "render:videos": "node scripts/render-all.mjs --videos-only"

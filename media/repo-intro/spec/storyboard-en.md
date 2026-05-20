@@ -5,7 +5,7 @@
 - Language: English
 - Duration target: 45-60 seconds
 - Primary compositions: `IntroEN169`, `IntroEN916`
-- Voice: Samantha, clear and practical developer explainer tone
+- Voice: Aiden via Qwen3-TTS, clear and practical developer explainer tone
 
 ## Scene 01
 - Goal: Hook viewers with the pain of fast-moving AI papers.

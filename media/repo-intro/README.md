@@ -26,10 +26,13 @@ Generated outputs are written to `out/`:
 
 ```bash
 npm install
+npm run setup:qwen
 npm run typecheck
 npm run compositions
 npm run voiceover
 npm run render
 ```
 
-The voiceover script uses the local system speech engine and writes scene-split audio files plus `src/audio-manifest.json`.
+The default voiceover path follows the `remotion-video-builder` skill and uses Qwen3-TTS with `Aiden` for English and `Serena` for Chinese. It writes scene-split audio files plus `src/audio-manifest.json`.
+
+For a fast local preview without Qwen, run `npm run voiceover:local`; this uses the local system speech engine only as a fallback.

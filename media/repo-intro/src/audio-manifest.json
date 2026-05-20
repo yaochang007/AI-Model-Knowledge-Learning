@@ -1,54 +1,54 @@
 {
   "en": {
     "01-hook": {
-      "file": "voiceover/en/01-hook.m4a",
-      "duration": 4.760091
+      "file": "voiceover/en/01-hook.wav",
+      "duration": 5.92
     },
     "02-repo": {
-      "file": "voiceover/en/02-repo.m4a",
-      "duration": 6.501587
+      "file": "voiceover/en/02-repo.wav",
+      "duration": 8.64
     },
     "03-essential": {
-      "file": "voiceover/en/03-essential.m4a",
-      "duration": 6.873107
+      "file": "voiceover/en/03-essential.wav",
+      "duration": 9.2
     },
     "04-analysis": {
-      "file": "voiceover/en/04-analysis.m4a",
-      "duration": 7.174966
+      "file": "voiceover/en/04-analysis.wav",
+      "duration": 8.88
     },
     "05-reading": {
-      "file": "voiceover/en/05-reading.m4a",
-      "duration": 6.617687
+      "file": "voiceover/en/05-reading.wav",
+      "duration": 7.44
     },
     "06-cta": {
-      "file": "voiceover/en/06-cta.m4a",
-      "duration": 6.606077
+      "file": "voiceover/en/06-cta.wav",
+      "duration": 7.52
     }
   },
   "zh": {
     "01-hook": {
-      "file": "voiceover/zh/01-hook.m4a",
-      "duration": 7.116916
+      "file": "voiceover/zh/01-hook.wav",
+      "duration": 6.56
     },
     "02-repo": {
-      "file": "voiceover/zh/02-repo.m4a",
-      "duration": 8.765533
+      "file": "voiceover/zh/02-repo.wav",
+      "duration": 9.44
     },
     "03-essential": {
-      "file": "voiceover/zh/03-essential.m4a",
-      "duration": 8.231474
+      "file": "voiceover/zh/03-essential.wav",
+      "duration": 8.72
     },
     "04-analysis": {
-      "file": "voiceover/zh/04-analysis.m4a",
-      "duration": 9.694331
+      "file": "voiceover/zh/04-analysis.wav",
+      "duration": 8.4
     },
     "05-reading": {
-      "file": "voiceover/zh/05-reading.m4a",
-      "duration": 8.196644
+      "file": "voiceover/zh/05-reading.wav",
+      "duration": 7.6
     },
     "06-cta": {
-      "file": "voiceover/zh/06-cta.m4a",
-      "duration": 8.057324
+      "file": "voiceover/zh/06-cta.wav",
+      "duration": 6.24
     }
   }
 }

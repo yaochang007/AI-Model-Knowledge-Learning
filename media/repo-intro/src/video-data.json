@@ -13,7 +13,10 @@
     "en": {
       "title": "Decode AI Papers Faster",
       "subtitle": "Vue Tech SG AI Research",
-      "voice": "Samantha",
+      "voice": "Aiden",
+      "qwenLanguage": "English",
+      "qwenPersona": "Speak clearly and naturally. Sound calm, practical, and technically confident. Keep the pacing moderate.",
+      "localVoice": "Samantha",
       "rate": 178,
       "coverKicker": "Open AI research repo",
       "coverLine": "From papers to learning paths",
@@ -78,7 +81,10 @@
     "zh": {
       "title": "AI论文，一站读懂",
       "subtitle": "Vue Tech SG AI Research",
-      "voice": "Tingting",
+      "voice": "Serena",
+      "qwenLanguage": "Chinese",
+      "qwenPersona": "语气冷静、清晰、专业。像独立开发者在解释自己做过的项目。节奏自然，不夸张。",
+      "localVoice": "Tingting",
       "rate": 170,
       "coverKicker": "AI 论文学习入口",
       "coverLine": "从收藏论文到真正读懂",
