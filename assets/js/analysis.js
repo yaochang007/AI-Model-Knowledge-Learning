@@ -1,5 +1,5 @@
 const deck = document.getElementById('analysisDeck');
-const DATA_VERSION = '20260520-8';
+const DATA_VERSION = '20260520-9';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -25,6 +25,7 @@ function updateHeaderBackLink(backTarget) {
 
 function renderAnalysis(paper, essential) {
     document.title = `${paper.title} | Vue Tech SG AI Research`;
+    window.vueTechSeo?.applyForCurrentPage?.();
     const sourceUrl = paper.sourceUrl || '';
     const backTarget = getBackTarget(Boolean(essential));
     updateHeaderBackLink(backTarget);

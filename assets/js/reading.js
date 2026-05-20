@@ -1,5 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
-const ASSET_VERSION = '20260520-8';
+const ASSET_VERSION = '20260520-9';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -224,6 +224,7 @@ function renderConceptGraph(analysis, notes, slideNumber) {
 
 function renderReading(analysis, essential, notes, figureData) {
     document.title = `${analysis.title} Intensive Reading | Vue Tech SG AI Research`;
+    window.vueTechSeo?.applyForCurrentPage?.();
     const tags = essential?.tags || [];
     const pdfPath = essential?.pdfPath;
     const sourceUrl = essential?.sourceUrl || analysis.sourceUrl;
