@@ -1,0 +1,144 @@
+{
+  "brand": {
+    "name": "Vue Tech SG AI Research",
+    "url": "research.vue.sg",
+    "logo": "brand/vue-tech-logo.png",
+    "stats": ["278 papers", "27 essentials", "Analysis + Intensive Reading"]
+  },
+  "hashtags": {
+    "en": ["#AIResearch", "#LLM", "#AIForEducation", "#PaperReading", "#ResearchTools", "#OpenSource", "#CloudflarePages", "#VueTechSG"],
+    "zh": ["#AI研究", "#大模型", "#AI教育", "#论文精读", "#科研工具", "#开源项目", "#CloudflarePages", "#VueTechSG"]
+  },
+  "languages": {
+    "en": {
+      "title": "Decode AI Papers Faster",
+      "subtitle": "Vue Tech SG AI Research",
+      "voice": "Samantha",
+      "rate": 178,
+      "coverKicker": "Open AI research repo",
+      "coverLine": "From papers to learning paths",
+      "cta": "Start at research.vue.sg",
+      "scenes": [
+        {
+          "id": "01-hook",
+          "title": "Decode AI Papers Faster",
+          "eyebrow": "Open research workflow",
+          "body": "AI papers move fast. This repo turns the noise into a learning path.",
+          "text": "AI papers are moving fast. This repo helps you turn the noise into a learning path.",
+          "subtitle": "AI papers move fast. Turn the noise into a learning path.",
+          "visual": "stats"
+        },
+        {
+          "id": "02-repo",
+          "title": "One Research Hub",
+          "eyebrow": "Search, filter, study",
+          "body": "A browsable repository for AI, LLM, and AI education papers.",
+          "text": "Vue Tech SG AI Research is a searchable repository for AI, LLM, and AI education papers.",
+          "subtitle": "A searchable hub for AI, LLM, and education research.",
+          "visual": "browser"
+        },
+        {
+          "id": "03-essential",
+          "title": "Start With Essentials",
+          "eyebrow": "Foundations first",
+          "body": "Transformer, BERT, RAG, LoRA, Mamba, and key AI education papers.",
+          "text": "Start with Essential Papers: Transformer, BERT, RAG, LoRA, Mamba, and key AI education studies.",
+          "subtitle": "Start with Transformer, BERT, RAG, LoRA, Mamba, and more.",
+          "visual": "papers"
+        },
+        {
+          "id": "04-analysis",
+          "title": "Analysis Mode",
+          "eyebrow": "PPT-style reading",
+          "body": "Overview, why it matters, method, results, limitations, and takeaways.",
+          "text": "Open Analysis for a PPT-style view: why it matters, method, results, limitations, and takeaways.",
+          "subtitle": "Analysis gives you the paper in a clear PPT-style structure.",
+          "visual": "analysis"
+        },
+        {
+          "id": "05-reading",
+          "title": "Intensive Reading",
+          "eyebrow": "Learn it properly",
+          "body": "Study notes, extracted figures, detailed comments, pitfalls, and practice tasks.",
+          "text": "Open Intensive Reading for study notes, figures, detailed comments, pitfalls, and practice tasks.",
+          "subtitle": "Intensive Reading helps learners study deeply, not just skim.",
+          "visual": "reading"
+        },
+        {
+          "id": "06-cta",
+          "title": "Build Your Paper Routine",
+          "eyebrow": "Use it today",
+          "body": "Search, filter, download PDFs, and create your own AI research path.",
+          "text": "Search, filter, download PDFs, and build your own paper-reading routine at research dot vue dot sg.",
+          "subtitle": "Search, filter, download, and build your own reading routine.",
+          "visual": "cta"
+        }
+      ]
+    },
+    "zh": {
+      "title": "AI论文，一站读懂",
+      "subtitle": "Vue Tech SG AI Research",
+      "voice": "Tingting",
+      "rate": 170,
+      "coverKicker": "AI 论文学习入口",
+      "coverLine": "从收藏论文到真正读懂",
+      "cta": "访问 research.vue.sg",
+      "scenes": [
+        {
+          "id": "01-hook",
+          "title": "AI论文，一站读懂",
+          "eyebrow": "研究学习入口",
+          "body": "AI 论文更新太快，难点不是收藏，而是读懂、读透、用起来。",
+          "text": "AI 论文更新太快，真正困难的不是收藏，而是读懂、读透、用起来。",
+          "subtitle": "AI 论文更新太快，难点是读懂、读透、用起来。",
+          "visual": "stats"
+        },
+        {
+          "id": "02-repo",
+          "title": "一个研究资料库",
+          "eyebrow": "搜索、筛选、学习",
+          "body": "整理 AI、大模型和 AI 教育论文，做成可浏览的研究网站。",
+          "text": "Vue Tech SG AI Research 把 AI、大模型和 AI 教育论文整理成一个可搜索的研究网站。",
+          "subtitle": "一个可搜索的 AI、大模型和 AI 教育研究网站。",
+          "visual": "browser"
+        },
+        {
+          "id": "03-essential",
+          "title": "先读必读论文",
+          "eyebrow": "打好基础",
+          "body": "Transformer、BERT、RAG、LoRA、Mamba，以及重要 AI 教育研究。",
+          "text": "先看 Essential Papers：Transformer、BERT、RAG、LoRA、Mamba，还有重要的 AI 教育研究。",
+          "subtitle": "从 Transformer、BERT、RAG、LoRA、Mamba 开始。",
+          "visual": "papers"
+        },
+        {
+          "id": "04-analysis",
+          "title": "Analysis 快速理解",
+          "eyebrow": "像 PPT 一样清楚",
+          "body": "快速抓住背景、方法、结果、局限和启发。",
+          "text": "点击 Analysis，可以用类似 PPT 的结构快速抓住背景、方法、结果、局限和启发。",
+          "subtitle": "Analysis 用 PPT 结构帮你快速理解论文。",
+          "visual": "analysis"
+        },
+        {
+          "id": "05-reading",
+          "title": "Intensive Reading 精读",
+          "eyebrow": "真正学会",
+          "body": "精读笔记、图解、详细批注、常见误区和练习任务。",
+          "text": "点击 Intensive Reading，可以看到精读笔记、图解、详细批注、常见误区和练习任务。",
+          "subtitle": "Intensive Reading 帮助学习者真正读懂论文。",
+          "visual": "reading"
+        },
+        {
+          "id": "06-cta",
+          "title": "建立你的论文路线",
+          "eyebrow": "现在开始",
+          "body": "搜索、筛选、下载 PDF，建立自己的 AI 论文学习路线。",
+          "text": "你可以搜索、筛选、下载论文 PDF，并建立自己的 AI 论文学习路线。",
+          "subtitle": "搜索、筛选、下载 PDF，建立自己的学习路线。",
+          "visual": "cta"
+        }
+      ]
+    }
+  }
+}

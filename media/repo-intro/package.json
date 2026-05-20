@@ -1,0 +1,26 @@
+{
+  "name": "vue-tech-ai-research-repo-intro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "compositions": "remotion compositions src/index.tsx --config=remotion.config.ts",
+    "voiceover": "node scripts/generate-voiceover.mjs",
+    "render": "node scripts/render-all.mjs",
+    "render:covers": "node scripts/render-all.mjs --covers-only",
+    "render:videos": "node scripts/render-all.mjs --videos-only"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.463",
+    "@remotion/renderer": "^4.0.463",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "remotion": "^4.0.463"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

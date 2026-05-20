@@ -1,0 +1,54 @@
+{
+  "en": {
+    "01-hook": {
+      "file": "voiceover/en/01-hook.m4a",
+      "duration": 4.760091
+    },
+    "02-repo": {
+      "file": "voiceover/en/02-repo.m4a",
+      "duration": 6.501587
+    },
+    "03-essential": {
+      "file": "voiceover/en/03-essential.m4a",
+      "duration": 6.873107
+    },
+    "04-analysis": {
+      "file": "voiceover/en/04-analysis.m4a",
+      "duration": 7.174966
+    },
+    "05-reading": {
+      "file": "voiceover/en/05-reading.m4a",
+      "duration": 6.617687
+    },
+    "06-cta": {
+      "file": "voiceover/en/06-cta.m4a",
+      "duration": 6.606077
+    }
+  },
+  "zh": {
+    "01-hook": {
+      "file": "voiceover/zh/01-hook.m4a",
+      "duration": 7.116916
+    },
+    "02-repo": {
+      "file": "voiceover/zh/02-repo.m4a",
+      "duration": 8.765533
+    },
+    "03-essential": {
+      "file": "voiceover/zh/03-essential.m4a",
+      "duration": 8.231474
+    },
+    "04-analysis": {
+      "file": "voiceover/zh/04-analysis.m4a",
+      "duration": 9.694331
+    },
+    "05-reading": {
+      "file": "voiceover/zh/05-reading.m4a",
+      "duration": 8.196644
+    },
+    "06-cta": {
+      "file": "voiceover/zh/06-cta.m4a",
+      "duration": 8.057324
+    }
+  }
+}
