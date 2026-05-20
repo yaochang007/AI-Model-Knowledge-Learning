@@ -1,5 +1,5 @@
 const deck = document.getElementById('analysisDeck');
-const DATA_VERSION = '20260520-7';
+const DATA_VERSION = '20260520-8';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -9,9 +9,26 @@ const escapeHtml = (text) => {
 
 const getPaperSlug = () => new URLSearchParams(window.location.search).get('paper');
 
-function renderAnalysis(paper) {
+function getBackTarget(isEssential) {
+    return isEssential
+        ? { href: './#essential-papers', label: 'Back to Essential Papers' }
+        : { href: './#paperList', label: 'Back to Papers' };
+}
+
+function updateHeaderBackLink(backTarget) {
+    const headerBackLink = document.querySelector('.analysis-header .section-link');
+    if(!headerBackLink) return;
+
+    headerBackLink.href = backTarget.href;
+    headerBackLink.innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${backTarget.label}`;
+}
+
+function renderAnalysis(paper, essential) {
     document.title = `${paper.title} | Vue Tech SG AI Research`;
     const sourceUrl = paper.sourceUrl || '';
+    const backTarget = getBackTarget(Boolean(essential));
+    updateHeaderBackLink(backTarget);
+
     deck.innerHTML = `
         <article class="analysis-hero">
             <div class="analysis-eyebrow">${escapeHtml(paper.venue)} ${escapeHtml(paper.year)}</div>
@@ -34,21 +51,28 @@ function renderAnalysis(paper) {
             `).join('')}
         </div>
         <div class="analysis-bottom-nav">
-            <a class="paper-link" href="./#paperList"><i class="fa-solid fa-arrow-left"></i> Back to Papers</a>
+            <a class="paper-link" href="${backTarget.href}"><i class="fa-solid fa-arrow-left"></i> ${backTarget.label}</a>
         </div>
     `;
 }
 
-fetch(`data/paper-analyses.json?v=${DATA_VERSION}`)
-    .then(response => {
-        if(!response.ok) throw new Error('Failed to load paper analyses');
+function fetchJson(path) {
+    return fetch(`${path}?v=${DATA_VERSION}`).then(response => {
+        if(!response.ok) throw new Error(`Failed to load ${path}`);
         return response.json();
-    })
-    .then(papers => {
+    });
+}
+
+Promise.all([
+    fetchJson('data/paper-analyses.json'),
+    fetchJson('data/essential-papers.json')
+])
+    .then(([papers, essentials]) => {
         const slug = getPaperSlug();
         const paper = papers.find(item => item.slug === slug) || papers[0];
         if(!paper) throw new Error('No analysis data available');
-        renderAnalysis(paper);
+        const essential = essentials.find(item => item.slug === paper.slug);
+        renderAnalysis(paper, essential);
     })
     .catch(error => {
         deck.innerHTML = `

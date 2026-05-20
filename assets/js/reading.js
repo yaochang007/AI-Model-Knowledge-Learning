@@ -1,5 +1,5 @@
 const readingDeck = document.getElementById('readingDeck');
-const ASSET_VERSION = '20260520-7';
+const ASSET_VERSION = '20260520-8';
 
 const escapeHtml = (text) => {
     const div = document.createElement('div');
@@ -8,6 +8,20 @@ const escapeHtml = (text) => {
 };
 
 const getPaperSlug = () => new URLSearchParams(window.location.search).get('paper');
+
+function getBackTarget(isEssential) {
+    return isEssential
+        ? { href: './#essential-papers', label: 'Back to Essential Papers' }
+        : { href: './#paperList', label: 'Back to Papers' };
+}
+
+function updateHeaderBackLink(backTarget) {
+    const headerBackLink = document.querySelector('.analysis-header .section-link');
+    if(!headerBackLink) return;
+
+    headerBackLink.href = backTarget.href;
+    headerBackLink.innerHTML = `<i class="fa-solid fa-arrow-left"></i> ${backTarget.label}`;
+}
 
 function fetchJson(path) {
     return fetch(`${path}?v=${ASSET_VERSION}`).then(response => {
@@ -220,6 +234,8 @@ function renderReading(analysis, essential, notes, figureData) {
     const pitfallsSlide = graphSlide + 3;
     const practiceSlide = graphSlide + 4;
     const routineSlide = graphSlide + 5;
+    const backTarget = getBackTarget(Boolean(essential));
+    updateHeaderBackLink(backTarget);
 
     readingDeck.innerHTML = `
         <article class="analysis-hero">
@@ -298,7 +314,7 @@ function renderReading(analysis, essential, notes, figureData) {
         </div>
         <div class="analysis-bottom-nav">
             <a class="paper-link" href="analysis.html?paper=${encodeURIComponent(analysis.slug)}"><i class="fa-solid fa-chart-simple"></i> Analysis</a>
-            <a class="paper-link" href="./#paperList"><i class="fa-solid fa-arrow-left"></i> Back to Papers</a>
+            <a class="paper-link" href="${backTarget.href}"><i class="fa-solid fa-arrow-left"></i> ${backTarget.label}</a>
         </div>
     `;
     bindFigureLightbox(figures);
