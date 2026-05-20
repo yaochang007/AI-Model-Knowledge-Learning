@@ -13,6 +13,7 @@ const mode = process.argv.includes('--covers-only')
 
 const covers = [
   ['CoverEN169', 'out/covers/vue-tech-ai-research-en-16x9.png'],
+  ['CoverEN43', 'out/covers/vue-tech-ai-research-en-4x3.png'],
   ['CoverEN916', 'out/covers/vue-tech-ai-research-en-9x16.png'],
   ['CoverZH169', 'out/covers/vue-tech-ai-research-zh-16x9.png'],
   ['CoverZH43', 'out/covers/vue-tech-ai-research-zh-4x3.png'],

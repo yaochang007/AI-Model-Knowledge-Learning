@@ -31,6 +31,7 @@ const variants: Array<{id: string; language: Language; aspect: Aspect}> = [
 
 const coverVariants: Array<{id: string; language: Language; aspect: Aspect}> = [
   {id: 'CoverEN169', language: 'en', aspect: '16x9'},
+  {id: 'CoverEN43', language: 'en', aspect: '4x3'},
   {id: 'CoverEN916', language: 'en', aspect: '9x16'},
   {id: 'CoverZH169', language: 'zh', aspect: '16x9'},
   {id: 'CoverZH43', language: 'zh', aspect: '4x3'},
